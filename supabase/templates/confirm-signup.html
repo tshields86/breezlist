@@ -1,0 +1,80 @@
+<!--
+  Supabase Email Template: Confirm Sign Up
+  Subject: Welcome to Breezlist - Confirm Your Email
+
+  Variables:
+  - {{ .ConfirmationURL }} - The confirmation link
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm your email — Breezlist</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f9fafb; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 480px; background-color: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 32px 32px 24px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+              <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
+                <span style="color: #0ea5e9;">breez</span><span style="color: #334155;">list</span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 32px;">
+              <h1 style="margin: 0 0 8px; font-size: 22px; font-weight: 600; color: #111827;">
+                Confirm your email
+              </h1>
+              <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #6b7280;">
+                Thanks for signing up for Breezlist! Tap the button below to verify your email address and get started.
+              </p>
+
+              <!-- CTA Button -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" style="padding: 4px 0 24px;">
+                    <a href="{{ .ConfirmationURL }}"
+                       style="display: inline-block; padding: 14px 32px; background-color: #0ea5e9; color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; border-radius: 8px; letter-spacing: 0.01em;">
+                      Verify email address
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin: 0 0 16px; font-size: 13px; line-height: 1.6; color: #9ca3af;">
+                If the button doesn't work, copy and paste this link into your browser:
+              </p>
+              <p style="margin: 0 0 24px; font-size: 13px; line-height: 1.5; color: #0ea5e9; word-break: break-all;">
+                {{ .ConfirmationURL }}
+              </p>
+
+              <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
+
+              <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #9ca3af;">
+                If you didn't create a Breezlist account, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 20px 32px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center;">
+              <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                <span style="color: #0ea5e9; font-weight: 600;">breez</span><span style="color: #334155; font-weight: 600;">list</span>
+                &nbsp;&middot;&nbsp; Simple, fast shared lists
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
