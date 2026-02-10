@@ -1,0 +1,104 @@
+import { cn } from '@/lib/utils.ts'
+import type { MouseEvent } from 'react'
+
+interface ListCardProps {
+  id: string
+  name: string
+  listType: string
+  itemCount: number
+  updatedAt: string
+  isOwner: boolean
+  members: Array<{
+    profile: { display_name: string | null; avatar_url: string | null } | null
+  }>
+  onClick: () => void
+  onDelete?: () => void
+}
+
+const typeEmoji: Record<string, string> = {
+  grocery: '🛒',
+  todo: '✅',
+  packing: '🧳',
+  gift: '🎁',
+  general: '📝',
+}
+
+export function ListCard({ name, listType, itemCount, updatedAt, isOwner, members, onClick, onDelete }: ListCardProps) {
+  const handleDelete = (e: MouseEvent) => {
+    e.stopPropagation()
+    onDelete?.()
+  }
+
+  const timeAgo = getRelativeTime(updatedAt)
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'w-full text-left p-4 rounded-xl border border-border',
+        'bg-bg-primary hover:bg-bg-secondary transition-colors',
+        'focus:outline-none focus:ring-2 focus:ring-accent',
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-lg">{typeEmoji[listType] ?? '📝'}</span>
+            <h3 className="font-semibold text-text-primary truncate">{name}</h3>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-text-muted">
+            <span>{itemCount} {itemCount === 1 ? 'item' : 'items'}</span>
+            <span>{timeAgo}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          {members.length > 0 && (
+            <div className="flex -space-x-2">
+              {members.slice(0, 3).map((m, i) => (
+                <div
+                  key={i}
+                  className="w-7 h-7 rounded-full bg-bg-tertiary border-2 border-bg-primary flex items-center justify-center text-xs font-medium text-text-secondary"
+                  title={m.profile?.display_name ?? 'Member'}
+                >
+                  {m.profile?.display_name?.[0]?.toUpperCase() ?? '?'}
+                </div>
+              ))}
+              {members.length > 3 && (
+                <div className="w-7 h-7 rounded-full bg-bg-tertiary border-2 border-bg-primary flex items-center justify-center text-xs font-medium text-text-muted">
+                  +{members.length - 3}
+                </div>
+              )}
+            </div>
+          )}
+          {isOwner && onDelete && (
+            <button
+              onClick={handleDelete}
+              className="ml-2 p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-bg-tertiary transition-colors"
+              aria-label="Delete list"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
+    </button>
+  )
+}
+
+function getRelativeTime(dateStr: string): string {
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+
+  if (diffMins < 1) return 'just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+  const diffHours = Math.floor(diffMins / 60)
+  if (diffHours < 24) return `${diffHours}h ago`
+  const diffDays = Math.floor(diffHours / 24)
+  if (diffDays < 7) return `${diffDays}d ago`
+  return date.toLocaleDateString()
+}
