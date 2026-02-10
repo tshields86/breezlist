@@ -20,7 +20,11 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+-- Grant the auth admin role access to insert profiles
+GRANT USAGE ON SCHEMA public TO supabase_auth_admin;
+GRANT INSERT ON profiles TO supabase_auth_admin;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users

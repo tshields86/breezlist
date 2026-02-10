@@ -30,7 +30,7 @@ export function useLists() {
       .from('lists')
       .select(`
         *,
-        list_members(user_id, role, profiles:profiles(display_name, avatar_url)),
+        list_members(user_id, role),
         items(count)
       `)
       .eq('is_template', false)
@@ -48,11 +48,10 @@ export function useLists() {
       members: ((list.list_members ?? []) as unknown as Array<{
         user_id: string
         role: string
-        profiles: { display_name: string | null; avatar_url: string | null } | null
       }>).map((m) => ({
         user_id: m.user_id,
         role: m.role,
-        profile: m.profiles,
+        profile: null,
       })),
     }))
 

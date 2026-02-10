@@ -23,6 +23,10 @@ $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 CREATE POLICY "profiles_select" ON profiles
   FOR SELECT TO authenticated USING (true);
 
+CREATE POLICY "profiles_insert" ON profiles
+  FOR INSERT TO authenticated
+  WITH CHECK (id = auth.uid());
+
 CREATE POLICY "profiles_update" ON profiles
   FOR UPDATE TO authenticated USING (id = auth.uid());
 

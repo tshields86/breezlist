@@ -4,6 +4,8 @@ import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSe
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { supabase } from '@/lib/supabase.ts'
 import { useItems } from '@/hooks/useItems.ts'
+import { useTemplates } from '@/hooks/useTemplates.ts'
+import { useToast } from '@/components/ui/Toast.tsx'
 import { SortableItemRow } from '@/components/items/SortableItemRow.tsx'
 import { ItemRow } from '@/components/items/ItemRow.tsx'
 import { AddItemInput } from '@/components/items/AddItemInput.tsx'
@@ -23,6 +25,9 @@ export default function ListView() {
   const [editingItem, setEditingItem] = useState<Item | null>(null)
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState('')
+  const [showMenu, setShowMenu] = useState(false)
+  const { saveAsTemplate } = useTemplates()
+  const { toast } = useToast()
 
   const {
     activeItems,
@@ -178,6 +183,51 @@ export default function ListView() {
               {list.name}
             </button>
           )}
+
+          {/* Menu button */}
+          <div className="relative shrink-0">
+            <button
+              onClick={() => setShowMenu((v) => !v)}
+              className="p-1.5 rounded-lg text-text-secondary hover:bg-bg-tertiary transition-colors"
+              aria-label="List menu"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" />
+              </svg>
+            </button>
+            {showMenu && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                <div className="absolute right-0 top-full mt-1 w-48 bg-bg-primary border border-border rounded-lg shadow-lg z-50 py-1">
+                  <button
+                    onClick={() => {
+                      setIsRenaming(true)
+                      setShowMenu(false)
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-text-primary hover:bg-bg-tertiary transition-colors"
+                  >
+                    Rename
+                  </button>
+                  <button
+                    onClick={async () => {
+                      setShowMenu(false)
+                      const name = window.prompt('Template name:', list.name)
+                      if (!name) return
+                      const result = await saveAsTemplate(list.id, name)
+                      if (result) {
+                        toast('Saved as template', 'success')
+                      } else {
+                        toast('Failed to save template', 'error')
+                      }
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-text-primary hover:bg-bg-tertiary transition-colors"
+                  >
+                    Save as template
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Sort mode selector */}
