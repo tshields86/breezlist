@@ -1,0 +1,5 @@
+export type ListType = 'grocery' | 'todo' | 'packing' | 'gift' | 'general'
+export type SortPreference = 'recent' | 'alphabetical' | 'manual'
+export type MemberRole = 'editor' | 'viewer'
+export type ItemUnit = 'oz' | 'lb' | 'g' | 'kg' | 'ml' | 'l' | 'cups' | 'pcs' | 'dozen' | 'pack'
+export type ThemeMode = 'system' | 'light' | 'dark'
