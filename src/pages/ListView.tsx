@@ -1,11 +1,16 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { supabase } from '@/lib/supabase.ts'
 import { useItems } from '@/hooks/useItems.ts'
+import { SortableItemRow } from '@/components/items/SortableItemRow.tsx'
 import { ItemRow } from '@/components/items/ItemRow.tsx'
 import { AddItemInput } from '@/components/items/AddItemInput.tsx'
 import { EditItemModal } from '@/components/items/EditItemModal.tsx'
+import { SortModeSelector } from '@/components/items/SortModeSelector.tsx'
 import type { Database } from '@/lib/database.types.ts'
+import type { SortPreference } from '@/types/index.ts'
 
 type List = Database['public']['Tables']['lists']['Row']
 type Item = Database['public']['Tables']['items']['Row']
@@ -29,7 +34,28 @@ export default function ListView() {
     toggleStar,
     deleteItem,
     clearCompleted,
+    reorderItem,
   } = useItems(id)
+
+  const sortPreference = (list?.sort_preference ?? 'manual') as SortPreference
+
+  const sortedActiveItems = useMemo(() => {
+    const items = [...activeItems]
+    switch (sortPreference) {
+      case 'alphabetical':
+        return items.sort((a, b) => a.text.localeCompare(b.text))
+      case 'recent':
+        return items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      case 'manual':
+      default:
+        return items.sort((a, b) => a.sort_order - b.sort_order)
+    }
+  }, [activeItems, sortPreference])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+  )
 
   useEffect(() => {
     if (!id) return
@@ -50,18 +76,36 @@ export default function ListView() {
       })
   }, [id, navigate])
 
+  const handleSortChange = useCallback(async (mode: SortPreference) => {
+    if (!list) return
+    await supabase.from('lists').update({ sort_preference: mode }).eq('id', list.id)
+    setList((prev) => prev ? { ...prev, sort_preference: mode } : prev)
+  }, [list])
+
+  const handleDragEnd = useCallback(async (event: DragEndEvent) => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = sortedActiveItems.findIndex((i) => i.id === active.id)
+    const newIndex = sortedActiveItems.findIndex((i) => i.id === over.id)
+    if (oldIndex === -1 || newIndex === -1) return
+
+    const prev = newIndex > 0 ? sortedActiveItems[newIndex - 1]?.sort_order ?? 0 : 0
+    const next = newIndex < sortedActiveItems.length - 1
+      ? sortedActiveItems[newIndex + (newIndex > oldIndex ? 0 : 1)]?.sort_order ?? prev + 2
+      : prev + 2
+    const newSortOrder = (prev + next) / 2
+
+    await reorderItem(active.id as string, newSortOrder)
+  }, [sortedActiveItems, reorderItem])
+
   const handleRename = useCallback(async () => {
     if (!list || !newName.trim() || newName.trim() === list.name) {
       setIsRenaming(false)
       setNewName(list?.name ?? '')
       return
     }
-
-    await supabase
-      .from('lists')
-      .update({ name: newName.trim() })
-      .eq('id', list.id)
-
+    await supabase.from('lists').update({ name: newName.trim() }).eq('id', list.id)
     setList((prev) => prev ? { ...prev, name: newName.trim() } : prev)
     setIsRenaming(false)
   }, [list, newName])
@@ -92,6 +136,8 @@ export default function ListView() {
   }
 
   if (!list) return null
+
+  const isManualSort = sortPreference === 'manual'
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-3.5rem-4rem)]">
@@ -133,11 +179,18 @@ export default function ListView() {
             </button>
           )}
         </div>
+
+        {/* Sort mode selector */}
+        {(activeItems.length > 1 || completedItems.length > 0) && (
+          <div className="flex justify-end mt-2">
+            <SortModeSelector value={sortPreference} onChange={handleSortChange} />
+          </div>
+        )}
       </div>
 
       {/* Items list */}
       <div className="flex-1 overflow-y-auto">
-        {activeItems.length === 0 && completedItems.length === 0 ? (
+        {sortedActiveItems.length === 0 && completedItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
             <div className="text-5xl mb-4">🛒</div>
             <h3 className="text-lg font-semibold text-text-primary mb-2">No items yet</h3>
@@ -145,25 +198,49 @@ export default function ListView() {
           </div>
         ) : (
           <>
-            {/* Active items */}
-            <div>
-              {activeItems.map((item) => (
-                <ItemRow
-                  key={item.id}
-                  id={item.id}
-                  text={item.text}
-                  quantity={item.quantity}
-                  unit={item.unit}
-                  notes={item.notes}
-                  isCompleted={false}
-                  isStarred={item.is_starred}
-                  onToggleComplete={() => toggleComplete(item.id)}
-                  onToggleStar={() => toggleStar(item.id)}
-                  onEdit={() => setEditingItem(item)}
-                  onDelete={() => deleteItem(item.id)}
-                />
-              ))}
-            </div>
+            {/* Active items — sortable in manual mode */}
+            {isManualSort ? (
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={sortedActiveItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+                  {sortedActiveItems.map((item) => (
+                    <SortableItemRow
+                      key={item.id}
+                      id={item.id}
+                      text={item.text}
+                      quantity={item.quantity}
+                      unit={item.unit}
+                      notes={item.notes}
+                      isCompleted={false}
+                      isStarred={item.is_starred}
+                      showDragHandle={true}
+                      onToggleComplete={() => toggleComplete(item.id)}
+                      onToggleStar={() => toggleStar(item.id)}
+                      onEdit={() => setEditingItem(item)}
+                      onDelete={() => deleteItem(item.id)}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
+            ) : (
+              <div>
+                {sortedActiveItems.map((item) => (
+                  <ItemRow
+                    key={item.id}
+                    id={item.id}
+                    text={item.text}
+                    quantity={item.quantity}
+                    unit={item.unit}
+                    notes={item.notes}
+                    isCompleted={false}
+                    isStarred={item.is_starred}
+                    onToggleComplete={() => toggleComplete(item.id)}
+                    onToggleStar={() => toggleStar(item.id)}
+                    onEdit={() => setEditingItem(item)}
+                    onDelete={() => deleteItem(item.id)}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Completed items */}
             {completedItems.length > 0 && (
