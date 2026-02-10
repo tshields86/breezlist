@@ -1,16 +1,50 @@
+import { lazy, Suspense } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from '@/contexts/ThemeContext.tsx'
-import { ThemeToggle } from '@/components/ui/ThemeToggle.tsx'
-import { Logo } from '@/components/ui/Logo.tsx'
+import { AuthProvider } from '@/contexts/AuthContext.tsx'
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute.tsx'
+import { AppShell } from '@/components/layout/AppShell.tsx'
+
+const Landing = lazy(() => import('@/pages/Landing.tsx'))
+const Home = lazy(() => import('@/pages/Home.tsx'))
+const ListView = lazy(() => import('@/pages/ListView.tsx'))
+const Templates = lazy(() => import('@/pages/Templates.tsx'))
+const Settings = lazy(() => import('@/pages/Settings.tsx'))
+
+function Loading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-bg-primary">
+      <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+}
 
 export default function App() {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-bg-primary text-text-primary">
-        <div className="flex items-center justify-center min-h-screen flex-col gap-6">
-          <Logo className="text-4xl" />
-          <ThemeToggle />
-        </div>
-      </div>
+      <AuthProvider>
+        <BrowserRouter>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path="/login" element={<Landing />} />
+              <Route path="/signup" element={<Landing />} />
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <AppShell />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="/lists" element={<Home />} />
+                <Route path="/lists/:id" element={<ListView />} />
+                <Route path="/templates" element={<Templates />} />
+                <Route path="/settings" element={<Settings />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/lists" replace />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   )
 }
