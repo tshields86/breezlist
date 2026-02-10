@@ -36,3 +36,6 @@ dist-ssr
 
 # PWA dev
 dev-dist
+
+# Supabase local
+supabase/.temp/
