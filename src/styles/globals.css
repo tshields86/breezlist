@@ -1,1 +1,63 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-breez: var(--color-brand-breez-val);
+  --color-brand-list: var(--color-brand-list-val);
+  --color-accent: var(--color-accent-val);
+  --color-accent-hover: var(--color-accent-hover-val);
+  --color-bg-primary: var(--color-bg-primary-val);
+  --color-bg-secondary: var(--color-bg-secondary-val);
+  --color-bg-tertiary: var(--color-bg-tertiary-val);
+  --color-text-primary: var(--color-text-primary-val);
+  --color-text-secondary: var(--color-text-secondary-val);
+  --color-text-muted: var(--color-text-muted-val);
+  --color-border: var(--color-border-val);
+  --color-success: var(--color-success-val);
+  --color-warning: var(--color-warning-val);
+  --color-danger: var(--color-danger-val);
+  --color-star: var(--color-star-val);
+}
+
+:root {
+  --color-brand-breez-val: #0ea5e9;
+  --color-brand-list-val: #334155;
+  --color-accent-val: #0ea5e9;
+  --color-accent-hover-val: #0284c7;
+  --color-bg-primary-val: #ffffff;
+  --color-bg-secondary-val: #f9fafb;
+  --color-bg-tertiary-val: #f3f4f6;
+  --color-text-primary-val: #111827;
+  --color-text-secondary-val: #6b7280;
+  --color-text-muted-val: #9ca3af;
+  --color-border-val: #e5e7eb;
+  --color-success-val: #22c55e;
+  --color-warning-val: #f59e0b;
+  --color-danger-val: #ef4444;
+  --color-star-val: #f59e0b;
+}
+
+.dark {
+  --color-brand-breez-val: #38bdf8;
+  --color-brand-list-val: #e2e8f0;
+  --color-accent-val: #38bdf8;
+  --color-accent-hover-val: #0ea5e9;
+  --color-bg-primary-val: #0f172a;
+  --color-bg-secondary-val: #1e293b;
+  --color-bg-tertiary-val: #334155;
+  --color-text-primary-val: #f1f5f9;
+  --color-text-secondary-val: #94a3b8;
+  --color-text-muted-val: #64748b;
+  --color-border-val: #334155;
+  --color-success-val: #4ade80;
+  --color-warning-val: #fbbf24;
+  --color-danger-val: #f87171;
+  --color-star-val: #fbbf24;
+}
+
+body {
+  background-color: var(--color-bg-primary-val);
+  color: var(--color-text-primary-val);
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
