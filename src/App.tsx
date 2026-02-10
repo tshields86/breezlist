@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/contexts/ThemeContext.tsx'
 import { AuthProvider } from '@/contexts/AuthContext.tsx'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute.tsx'
 import { AppShell } from '@/components/layout/AppShell.tsx'
+import { ToastProvider } from '@/components/ui/Toast.tsx'
 
 const Landing = lazy(() => import('@/pages/Landing.tsx'))
 const Home = lazy(() => import('@/pages/Home.tsx'))
@@ -23,6 +24,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
+        <ToastProvider>
         <BrowserRouter>
           <Suspense fallback={<Loading />}>
             <Routes>
@@ -44,6 +46,7 @@ export default function App() {
             </Routes>
           </Suspense>
         </BrowserRouter>
+        </ToastProvider>
       </AuthProvider>
     </ThemeProvider>
   )
