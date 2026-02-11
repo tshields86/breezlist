@@ -3,9 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { supabase } from '@/lib/supabase.ts'
+import { useAuth } from '@/hooks/useAuth.ts'
 import { useItems } from '@/hooks/useItems.ts'
 import { useTemplates } from '@/hooks/useTemplates.ts'
+import { useRealtime } from '@/hooks/useRealtime.ts'
 import { useToast } from '@/components/ui/Toast.tsx'
+import { ShareListModal } from '@/components/lists/ShareListModal.tsx'
 import { SortableItemRow } from '@/components/items/SortableItemRow.tsx'
 import { ItemRow } from '@/components/items/ItemRow.tsx'
 import { AddItemInput } from '@/components/items/AddItemInput.tsx'
@@ -17,15 +20,24 @@ import type { SortPreference } from '@/types/index.ts'
 type List = Database['public']['Tables']['lists']['Row']
 type Item = Database['public']['Tables']['items']['Row']
 
+interface ListMember {
+  user_id: string
+  role: string
+  profile: { display_name: string | null; avatar_url: string | null } | null
+}
+
 export default function ListView() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [list, setList] = useState<List | null>(null)
   const [listLoading, setListLoading] = useState(true)
   const [editingItem, setEditingItem] = useState<Item | null>(null)
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState('')
   const [showMenu, setShowMenu] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [members, setMembers] = useState<ListMember[]>([])
   const { saveAsTemplate } = useTemplates()
   const { toast } = useToast()
 
@@ -40,7 +52,10 @@ export default function ListView() {
     deleteItem,
     clearCompleted,
     reorderItem,
+    refetch: refetchItems,
   } = useItems(id)
+
+  useRealtime({ listId: id, onItemChange: refetchItems })
 
   const sortPreference = (list?.sort_preference ?? 'manual') as SortPreference
 
@@ -62,12 +77,29 @@ export default function ListView() {
     useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
   )
 
+  const fetchMembers = useCallback(async () => {
+    if (!id) return
+    const { data } = await supabase
+      .from('list_members')
+      .select('user_id, role, profile:profiles!list_members_user_id_fkey(display_name, avatar_url)')
+      .eq('list_id', id)
+
+    if (data) {
+      setMembers(
+        (data as unknown as ListMember[]).filter((m) => m.user_id !== list?.owner_id),
+      )
+    }
+  }, [id, list?.owner_id])
+
   useEffect(() => {
     if (!id) return
     setListLoading(true)
     supabase
       .from('lists')
-      .select('*')
+      .select(`
+        *,
+        list_members(user_id, role, profile:profiles!list_members_user_id_fkey(display_name, avatar_url))
+      `)
       .eq('id', id)
       .single()
       .then(({ data, error }) => {
@@ -75,8 +107,12 @@ export default function ListView() {
           navigate('/lists', { replace: true })
           return
         }
-        setList(data)
-        setNewName(data.name)
+        const { list_members, ...listData } = data as typeof data & { list_members: ListMember[] }
+        setList(listData)
+        setNewName(listData.name)
+        setMembers(
+          (list_members ?? []).filter((m) => m.user_id !== listData.owner_id),
+        )
         setListLoading(false)
       })
   }, [id, navigate])
@@ -207,6 +243,15 @@ export default function ListView() {
                     className="w-full text-left px-4 py-2.5 text-sm text-text-primary hover:bg-bg-tertiary transition-colors"
                   >
                     Rename
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowShareModal(true)
+                      setShowMenu(false)
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-text-primary hover:bg-bg-tertiary transition-colors"
+                  >
+                    Share
                   </button>
                   <button
                     onClick={async () => {
@@ -345,6 +390,16 @@ export default function ListView() {
           onDelete={handleEditDelete}
         />
       )}
+
+      {/* Share modal */}
+      <ShareListModal
+        open={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        listId={list.id}
+        isOwner={list.owner_id === user?.id}
+        members={members}
+        onMembersChange={fetchMembers}
+      />
     </div>
   )
 }
