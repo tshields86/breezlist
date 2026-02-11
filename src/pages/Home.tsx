@@ -36,7 +36,8 @@ export default function Home() {
 
       <button
         onClick={() => setShowCreate(true)}
-        className="fixed bottom-20 right-4 w-14 h-14 rounded-full bg-accent text-white shadow-lg hover:bg-accent-hover transition-colors flex items-center justify-center z-30"
+        className="fixed right-4 w-14 h-14 rounded-full bg-accent text-white shadow-lg hover:bg-accent-hover transition-colors flex items-center justify-center z-30"
+        style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}
         aria-label="Create new list"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
