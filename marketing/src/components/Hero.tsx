@@ -21,7 +21,7 @@ export function Hero() {
 
         <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-text-secondary animate-fade-in-up-delay-2">
           Stop texting lists back and forth. Create, share, and collaborate in
-          real-time &mdash; groceries, todos, packing, gifts, and more.
+          real-time. Groceries, todos, packing, gifts, and more.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up-delay-3">
@@ -29,7 +29,7 @@ export function Hero() {
             href="https://app.breezlist.com/signup"
             className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-accent text-white font-semibold text-lg hover:bg-accent-hover transition-colors shadow-lg shadow-accent/25"
           >
-            Get Started — It&apos;s Free
+            Get Started, It&apos;s Free
           </a>
           <a
             href="#how-it-works"
