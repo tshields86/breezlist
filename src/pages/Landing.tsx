@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth.ts'
 import { Logo } from '@/components/ui/Logo.tsx'
 import { LoginForm } from '@/components/auth/LoginForm.tsx'
 import { SignupForm } from '@/components/auth/SignupForm.tsx'
+import { InstallBanner } from '@/components/ui/InstallBanner.tsx'
 
 export default function Landing() {
   const { user, loading } = useAuth()
@@ -28,11 +29,17 @@ export default function Landing() {
         <p className="mt-2 text-text-secondary">Easy shared lists for everything</p>
       </div>
 
-      {mode === 'login' ? (
-        <LoginForm onSwitchToSignup={() => setMode('signup')} />
-      ) : (
-        <SignupForm onSwitchToLogin={() => setMode('login')} />
-      )}
+      <div className="w-full max-w-sm">
+        <InstallBanner />
+      </div>
+
+      <div className="mt-4">
+        {mode === 'login' ? (
+          <LoginForm onSwitchToSignup={() => setMode('signup')} />
+        ) : (
+          <SignupForm onSwitchToLogin={() => setMode('login')} />
+        )}
+      </div>
     </div>
   )
 }
