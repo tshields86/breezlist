@@ -44,16 +44,13 @@ export function Header() {
           <Logo className="text-2xl" />
         </a>
 
-        <nav className="hidden sm:flex items-center gap-8 text-sm text-text-secondary">
-          <a href="#features" className="hover:text-text-primary transition-colors">
+        <div className="flex items-center gap-8">
+          <a href="#features" className="hidden sm:block text-sm text-text-secondary hover:text-text-primary transition-colors">
             Features
           </a>
-          <a href="#how-it-works" className="hover:text-text-primary transition-colors">
+          <a href="#how-it-works" className="hidden sm:block text-sm text-text-secondary hover:text-text-primary transition-colors">
             How It Works
           </a>
-        </nav>
-
-        <div className="flex items-center gap-3">
           <button
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
