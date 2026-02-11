@@ -27,13 +27,13 @@ export function Hero() {
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up-delay-3">
           <a
             href="https://app.breezlist.com/signup"
-            className="inline-flex items-center px-8 py-3.5 rounded-xl bg-accent text-white font-semibold text-lg hover:bg-accent-hover transition-colors shadow-lg shadow-accent/25"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-accent text-white font-semibold text-lg hover:bg-accent-hover transition-colors shadow-lg shadow-accent/25"
           >
             Get Started — It&apos;s Free
           </a>
           <a
             href="#how-it-works"
-            className="inline-flex items-center px-8 py-3.5 rounded-xl border border-border text-text-secondary font-medium text-lg hover:bg-bg-secondary transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl border border-border text-text-secondary font-medium text-lg hover:bg-bg-secondary transition-colors"
           >
             See How It Works
           </a>

@@ -92,11 +92,11 @@ export function HowItWorks() {
               }`}
               style={{ animationDelay: `${i * 0.1}s` }}
             >
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent/10 text-accent mb-4">
+              <div className="relative inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent/10 text-accent mb-4">
                 {step.icon}
-              </div>
-              <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-accent text-white text-xs font-bold flex items-center justify-center sm:static sm:mx-auto sm:-mt-10 sm:mb-3">
-                {step.number}
+                <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-accent text-white text-[11px] font-bold flex items-center justify-center">
+                  {step.number}
+                </div>
               </div>
               <h3 className="text-lg font-semibold text-text-primary">
                 {step.title}

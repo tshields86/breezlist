@@ -10,17 +10,17 @@ export function SocialProof() {
           {[
             {
               quote: 'Finally, a list app that doesn\'t try to be a project manager.',
-              author: 'Sarah K.',
+              author: 'Karen K.',
               role: 'Uses for weekly groceries',
             },
             {
-              quote: 'My roommates and I share a house list. It just works.',
-              author: 'Marcus T.',
+              quote: 'My wife and I share a house list. It just works.',
+              author: 'Travis S.',
               role: 'Shared household lists',
             },
             {
               quote: 'I use templates for every family trip. Packing has never been easier.',
-              author: 'Priya M.',
+              author: 'Nina T.',
               role: 'Family travel planning',
             },
           ].map((testimonial) => (
