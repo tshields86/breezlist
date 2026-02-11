@@ -16,7 +16,11 @@ function isStandalone(): boolean {
 }
 
 function isIOS(): boolean {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
+  const ua = navigator.userAgent
+  if (/iPad|iPhone|iPod/.test(ua) && !('MSStream' in window)) return true
+  // iPad on iOS 13+ reports as MacIntel with touch support
+  if (navigator.maxTouchPoints > 1 && /Macintosh/.test(ua)) return true
+  return false
 }
 
 function wasDismissedRecently(): boolean {
@@ -28,22 +32,17 @@ function wasDismissedRecently(): boolean {
 
 export function useInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
-  const [isInstalled, setIsInstalled] = useState(false)
-  const [isDismissed, setIsDismissed] = useState(false)
-  const [isIOSDevice, setIsIOSDevice] = useState(false)
+  const [isInstalled] = useState(isStandalone)
+  const [isDismissed, setIsDismissed] = useState(wasDismissedRecently)
+  const [isIOSDevice] = useState(isIOS)
 
   useEffect(() => {
-    setIsInstalled(isStandalone())
-    setIsIOSDevice(isIOS())
-    setIsDismissed(wasDismissedRecently())
-
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e as BeforeInstallPromptEvent)
     }
 
     const handleAppInstalled = () => {
-      setIsInstalled(true)
       setDeferredPrompt(null)
     }
 
@@ -59,10 +58,7 @@ export function useInstallPrompt() {
   const install = useCallback(async () => {
     if (!deferredPrompt) return
     await deferredPrompt.prompt()
-    const { outcome } = await deferredPrompt.userChoice
-    if (outcome === 'accepted') {
-      setIsInstalled(true)
-    }
+    await deferredPrompt.userChoice
     setDeferredPrompt(null)
   }, [deferredPrompt])
 
