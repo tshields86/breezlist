@@ -124,10 +124,10 @@ export default function PrivacyPolicy() {
           <p className="mt-2">
             To exercise any of these rights, contact us at{' '}
             <a
-              href="mailto:privacy@breezlist.com"
+              href="mailto:travis.shields@gmail.com"
               className="text-accent hover:underline"
             >
-              privacy@breezlist.com
+              travis.shields@gmail.com
             </a>
             .
           </p>
@@ -173,10 +173,10 @@ export default function PrivacyPolicy() {
           <p>
             If you have questions about this Privacy Policy, please contact us at{' '}
             <a
-              href="mailto:privacy@breezlist.com"
+              href="mailto:travis.shields@gmail.com"
               className="text-accent hover:underline"
             >
-              privacy@breezlist.com
+              travis.shields@gmail.com
             </a>
             .
           </p>

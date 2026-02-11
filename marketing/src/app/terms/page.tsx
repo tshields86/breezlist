@@ -144,10 +144,10 @@ export default function TermsOfService() {
           <p>
             If you have questions about these Terms, please contact us at{' '}
             <a
-              href="mailto:support@breezlist.com"
+              href="mailto:travis.shields@gmail.com"
               className="text-accent hover:underline"
             >
-              support@breezlist.com
+              travis.shields@gmail.com
             </a>
             .
           </p>
