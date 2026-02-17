@@ -54,7 +54,7 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   }
 
   return (
-    <div className="sticky bottom-16 bg-bg-primary border-t border-border px-4 py-3 z-20">
+    <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom,0px))] bg-bg-primary border-t border-border px-4 py-3 z-20">
       <div className="relative">
         <ItemAutocomplete
           suggestions={suggestions}

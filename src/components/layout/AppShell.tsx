@@ -10,7 +10,7 @@ export function AppShell() {
       <div className="max-w-lg mx-auto">
         <InstallBanner />
       </div>
-      <main className="pb-20 max-w-lg mx-auto">
+      <main className="pb-[calc(5rem+env(safe-area-inset-bottom,0px))] max-w-lg mx-auto">
         <Outlet />
       </main>
       <BottomNav />

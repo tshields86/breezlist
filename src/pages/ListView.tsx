@@ -181,7 +181,7 @@ export default function ListView() {
   const isManualSort = sortPreference === 'manual'
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-3.5rem-4rem)]">
+    <div className="flex flex-col min-h-[calc(100vh-3.5rem-4rem-env(safe-area-inset-bottom,0px))]">
       {/* List header */}
       <div className="px-4 py-3 border-b border-border">
         <div className="flex items-center gap-2">
