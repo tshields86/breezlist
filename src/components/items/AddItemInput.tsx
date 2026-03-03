@@ -15,11 +15,16 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
   const [focused, setFocused] = useState(false)
+  const justSubmitted = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const { suggestions, searchHistory, getFrequentItems, clearSuggestions } = useItemHistory()
 
   useEffect(() => {
     if (!focused) return
+    if (justSubmitted.current) {
+      justSubmitted.current = false
+      return
+    }
     if (text.trim().length > 0) {
       searchHistory(text.trim())
     } else {
@@ -31,6 +36,7 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
     if (!itemText || loading) return
     setLoading(true)
     await onAdd({ text: itemText })
+    justSubmitted.current = true
     setText('')
     clearSuggestions()
     setLoading(false)
