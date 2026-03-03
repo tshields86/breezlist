@@ -10,12 +10,15 @@ interface EditItemModalProps {
     quantity: number | null
     unit: string | null
     notes: string | null
+    categoryId?: string | null
   }
+  categories?: Array<{ id: string; name: string }>
   onSave: (updates: {
     text: string
     quantity: number | null
     unit: string | null
     notes: string | null
+    category_id: string | null
   }) => Promise<void>
   onDelete: () => void
 }
@@ -33,11 +36,12 @@ const units: Array<{ value: ItemUnit; label: string }> = [
   { value: 'pack', label: 'pack' },
 ]
 
-export function EditItemModal({ open, onClose, item, onSave, onDelete }: EditItemModalProps) {
+export function EditItemModal({ open, onClose, item, categories, onSave, onDelete }: EditItemModalProps) {
   const [text, setText] = useState(item.text)
   const [quantity, setQuantity] = useState(item.quantity?.toString() ?? '')
   const [unit, setUnit] = useState(item.unit ?? '')
   const [notes, setNotes] = useState(item.notes ?? '')
+  const [categoryId, setCategoryId] = useState(item.categoryId ?? '')
   const [loading, setLoading] = useState(false)
 
   if (!open) return null
@@ -52,6 +56,7 @@ export function EditItemModal({ open, onClose, item, onSave, onDelete }: EditIte
       quantity: quantity ? Number(quantity) : null,
       unit: unit || null,
       notes: notes.trim() || null,
+      category_id: categoryId || null,
     })
     setLoading(false)
     onClose()
@@ -128,6 +133,25 @@ export function EditItemModal({ open, onClose, item, onSave, onDelete }: EditIte
               placeholder="Optional notes..."
             />
           </div>
+
+          {categories && categories.length > 0 && (
+            <div>
+              <label htmlFor="edit-category" className="block text-sm font-medium text-text-secondary mb-1">
+                Group
+              </label>
+              <select
+                id="edit-category"
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+              >
+                <option value="">No group</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <button

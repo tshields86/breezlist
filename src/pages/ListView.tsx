@@ -5,6 +5,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { supabase } from '@/lib/supabase.ts'
 import { useAuth } from '@/hooks/useAuth.ts'
 import { useItems } from '@/hooks/useItems.ts'
+import { useCategories } from '@/hooks/useCategories.ts'
 import { useTemplates } from '@/hooks/useTemplates.ts'
 import { useRealtime } from '@/hooks/useRealtime.ts'
 import { useToast } from '@/components/ui/Toast.tsx'
@@ -13,6 +14,7 @@ import { SortableItemRow } from '@/components/items/SortableItemRow.tsx'
 import { ItemRow } from '@/components/items/ItemRow.tsx'
 import { AddItemInput } from '@/components/items/AddItemInput.tsx'
 import { EditItemModal } from '@/components/items/EditItemModal.tsx'
+import { CategoryGroup } from '@/components/items/CategoryGroup.tsx'
 import { SortModeSelector } from '@/components/items/SortModeSelector.tsx'
 import type { Database } from '@/lib/database.types.ts'
 import type { SortPreference } from '@/types/index.ts'
@@ -55,6 +57,8 @@ export default function ListView() {
     refetch: refetchItems,
   } = useItems(id)
 
+  const { categories, addCategory, renameCategory, deleteCategory } = useCategories(id)
+
   useRealtime({ listId: id, onItemChange: refetchItems })
 
   const sortPreference = (list?.sort_preference ?? 'manual') as SortPreference
@@ -71,6 +75,19 @@ export default function ListView() {
         return items.sort((a, b) => a.sort_order - b.sort_order)
     }
   }, [activeItems, sortPreference])
+
+  const categoryItemsMap = useMemo(() => {
+    if (categories.length === 0) return null
+    const map = new Map<string | null, Item[]>()
+    for (const cat of categories) map.set(cat.id, [])
+    map.set(null, [])
+    for (const item of sortedActiveItems) {
+      const catId = item.category_id ?? null
+      const bucket = map.has(catId) ? catId : null
+      map.get(bucket)!.push(item)
+    }
+    return map
+  }, [categories, sortedActiveItems])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -156,6 +173,7 @@ export default function ListView() {
     quantity: number | null
     unit: string | null
     notes: string | null
+    category_id: string | null
   }) => {
     if (!editingItem) return
     await updateItem(editingItem.id, updates)
@@ -256,6 +274,18 @@ export default function ListView() {
                   <button
                     onClick={async () => {
                       setShowMenu(false)
+                      const name = window.prompt('Group name:')
+                      if (!name?.trim()) return
+                      const result = await addCategory(name.trim())
+                      if (!result) toast('Failed to add group', 'error')
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-text-primary hover:bg-bg-tertiary transition-colors"
+                  >
+                    Add group
+                  </button>
+                  <button
+                    onClick={async () => {
+                      setShowMenu(false)
                       const name = window.prompt('Template name:', list.name)
                       if (!name) return
                       const result = await saveAsTemplate(list.id, name)
@@ -293,12 +323,152 @@ export default function ListView() {
           </div>
         ) : (
           <>
-            {/* Active items — sortable in manual mode */}
-            {isManualSort ? (
-              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                <SortableContext items={sortedActiveItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+            {/* Active items — grouped when categories exist, flat otherwise */}
+            {categoryItemsMap ? (
+              /* Grouped rendering */
+              isManualSort ? (
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                  <SortableContext items={sortedActiveItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+                    {categories.map((cat) => {
+                      const catItems = categoryItemsMap.get(cat.id) ?? []
+                      return (
+                        <CategoryGroup
+                          key={cat.id}
+                          name={cat.name}
+                          itemCount={catItems.length}
+                          onRename={(name) => renameCategory(cat.id, name)}
+                          onDelete={() => deleteCategory(cat.id)}
+                        >
+                          {catItems.map((item) => (
+                            <SortableItemRow
+                              key={item.id}
+                              id={item.id}
+                              text={item.text}
+                              quantity={item.quantity}
+                              unit={item.unit}
+                              notes={item.notes}
+                              isCompleted={false}
+                              isStarred={item.is_starred}
+                              showDragHandle={true}
+                              onToggleComplete={() => toggleComplete(item.id)}
+                              onToggleStar={() => toggleStar(item.id)}
+                              onEdit={() => setEditingItem(item)}
+                              onDelete={() => deleteItem(item.id)}
+                            />
+                          ))}
+                        </CategoryGroup>
+                      )
+                    })}
+                    {(categoryItemsMap.get(null) ?? []).length > 0 && (
+                      <div className="mb-2">
+                        <div className="px-4 py-2 bg-bg-secondary text-sm font-semibold text-text-muted uppercase tracking-wider">
+                          Uncategorized
+                        </div>
+                        {categoryItemsMap.get(null)!.map((item) => (
+                          <SortableItemRow
+                            key={item.id}
+                            id={item.id}
+                            text={item.text}
+                            quantity={item.quantity}
+                            unit={item.unit}
+                            notes={item.notes}
+                            isCompleted={false}
+                            isStarred={item.is_starred}
+                            showDragHandle={true}
+                            onToggleComplete={() => toggleComplete(item.id)}
+                            onToggleStar={() => toggleStar(item.id)}
+                            onEdit={() => setEditingItem(item)}
+                            onDelete={() => deleteItem(item.id)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </SortableContext>
+                </DndContext>
+              ) : (
+                <div>
+                  {categories.map((cat) => {
+                    const catItems = categoryItemsMap.get(cat.id) ?? []
+                    return (
+                      <CategoryGroup
+                        key={cat.id}
+                        name={cat.name}
+                        itemCount={catItems.length}
+                        onRename={(name) => renameCategory(cat.id, name)}
+                        onDelete={() => deleteCategory(cat.id)}
+                      >
+                        {catItems.map((item) => (
+                          <ItemRow
+                            key={item.id}
+                            id={item.id}
+                            text={item.text}
+                            quantity={item.quantity}
+                            unit={item.unit}
+                            notes={item.notes}
+                            isCompleted={false}
+                            isStarred={item.is_starred}
+                            onToggleComplete={() => toggleComplete(item.id)}
+                            onToggleStar={() => toggleStar(item.id)}
+                            onEdit={() => setEditingItem(item)}
+                            onDelete={() => deleteItem(item.id)}
+                          />
+                        ))}
+                      </CategoryGroup>
+                    )
+                  })}
+                  {(categoryItemsMap.get(null) ?? []).length > 0 && (
+                    <div className="mb-2">
+                      <div className="px-4 py-2 bg-bg-secondary text-sm font-semibold text-text-muted uppercase tracking-wider">
+                        Uncategorized
+                      </div>
+                      {categoryItemsMap.get(null)!.map((item) => (
+                        <ItemRow
+                          key={item.id}
+                          id={item.id}
+                          text={item.text}
+                          quantity={item.quantity}
+                          unit={item.unit}
+                          notes={item.notes}
+                          isCompleted={false}
+                          isStarred={item.is_starred}
+                          onToggleComplete={() => toggleComplete(item.id)}
+                          onToggleStar={() => toggleStar(item.id)}
+                          onEdit={() => setEditingItem(item)}
+                          onDelete={() => deleteItem(item.id)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            ) : (
+              /* Flat rendering (no categories) */
+              isManualSort ? (
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                  <SortableContext items={sortedActiveItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+                    {sortedActiveItems.map((item) => (
+                      <SortableItemRow
+                        key={item.id}
+                        id={item.id}
+                        text={item.text}
+                        quantity={item.quantity}
+                        unit={item.unit}
+                        notes={item.notes}
+                        isCompleted={false}
+                        isStarred={item.is_starred}
+                        showDragHandle={true}
+                        onToggleComplete={() => toggleComplete(item.id)}
+                        onToggleStar={() => toggleStar(item.id)}
+                        onEdit={() => setEditingItem(item)}
+                        onDelete={() => deleteItem(item.id)}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
+              ) : (
+                <div>
                   {sortedActiveItems.map((item) => (
-                    <SortableItemRow
+                    <ItemRow
                       key={item.id}
                       id={item.id}
                       text={item.text}
@@ -307,34 +477,14 @@ export default function ListView() {
                       notes={item.notes}
                       isCompleted={false}
                       isStarred={item.is_starred}
-                      showDragHandle={true}
                       onToggleComplete={() => toggleComplete(item.id)}
                       onToggleStar={() => toggleStar(item.id)}
                       onEdit={() => setEditingItem(item)}
                       onDelete={() => deleteItem(item.id)}
                     />
                   ))}
-                </SortableContext>
-              </DndContext>
-            ) : (
-              <div>
-                {sortedActiveItems.map((item) => (
-                  <ItemRow
-                    key={item.id}
-                    id={item.id}
-                    text={item.text}
-                    quantity={item.quantity}
-                    unit={item.unit}
-                    notes={item.notes}
-                    isCompleted={false}
-                    isStarred={item.is_starred}
-                    onToggleComplete={() => toggleComplete(item.id)}
-                    onToggleStar={() => toggleStar(item.id)}
-                    onEdit={() => setEditingItem(item)}
-                    onDelete={() => deleteItem(item.id)}
-                  />
-                ))}
-              </div>
+                </div>
+              )
             )}
 
             {/* Completed items */}
@@ -385,7 +535,8 @@ export default function ListView() {
         <EditItemModal
           open={true}
           onClose={() => setEditingItem(null)}
-          item={editingItem}
+          item={{ ...editingItem, categoryId: editingItem.category_id }}
+          categories={categories.length > 0 ? categories : undefined}
           onSave={handleEditSave}
           onDelete={handleEditDelete}
         />
