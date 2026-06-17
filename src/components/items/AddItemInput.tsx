@@ -60,8 +60,8 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   }
 
   return (
-    <div className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom,0px))] bg-bg-primary border-t border-border px-4 py-3 z-20">
-      <div className="relative">
+    <div className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom,0px))] left-0 right-0 bg-bg-primary border-t border-border z-30">
+      <div className="relative max-w-lg mx-auto px-4 py-3">
         <ItemAutocomplete
           suggestions={suggestions}
           onSelect={handleSuggestionSelect}

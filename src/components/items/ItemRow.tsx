@@ -15,6 +15,7 @@ interface ItemRowProps {
 }
 
 export function ItemRow({
+  id,
   text,
   quantity,
   unit,
@@ -32,6 +33,7 @@ export function ItemRow({
 
   return (
     <div
+      id={`item-${id}`}
       className={cn(
         'flex items-start gap-3 px-4 py-3 border-b border-border last:border-b-0',
         'transition-colors',
