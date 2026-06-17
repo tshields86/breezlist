@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabase.ts'
 import { useAuth } from '@/hooks/useAuth.ts'
+import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
 
 interface Member {
   user_id: string
@@ -23,6 +24,8 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
+
+  useModalDismiss(open, onClose)
 
   if (!open) return null
 

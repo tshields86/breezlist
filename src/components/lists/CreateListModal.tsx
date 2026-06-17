@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { cn } from '@/lib/utils.ts'
+import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
 import type { ListType } from '@/types/index.ts'
 
 interface CreateListModalProps {
@@ -20,6 +21,8 @@ export function CreateListModal({ open, onClose, onCreate }: CreateListModalProp
   const [name, setName] = useState('')
   const [listType, setListType] = useState<ListType>('general')
   const [loading, setLoading] = useState(false)
+
+  useModalDismiss(open, onClose)
 
   if (!open) return null
 

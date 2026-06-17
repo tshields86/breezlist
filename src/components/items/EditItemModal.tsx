@@ -1,4 +1,5 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
+import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
 import type { ItemUnit } from '@/types/index.ts'
 
 interface EditItemModalProps {
@@ -44,22 +45,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
   const [categoryId, setCategoryId] = useState(item.categoryId ?? '')
   const [loading, setLoading] = useState(false)
 
-  // Lock background scroll and enable Esc-to-close while the modal is open.
-  useEffect(() => {
-    if (!open) return
-    // The viewport scroll container is <html>, so lock that (not <body>).
-    const root = document.documentElement
-    const prevOverflow = root.style.overflow
-    root.style.overflow = 'hidden'
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', handleKey)
-    return () => {
-      root.style.overflow = prevOverflow
-      document.removeEventListener('keydown', handleKey)
-    }
-  }, [open, onClose])
+  useModalDismiss(open, onClose)
 
   if (!open) return null
 
