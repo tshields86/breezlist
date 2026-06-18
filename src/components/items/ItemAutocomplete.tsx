@@ -16,7 +16,7 @@ export function ItemAutocomplete({ suggestions, onSelect, visible }: ItemAutocom
   if (!visible || suggestions.length === 0) return null
 
   // Keep the popup compact on mobile so it doesn't bury the list behind it.
-  const shown = suggestions.slice(0, 5)
+  const shown = suggestions.slice(0, 3)
 
   return (
     <div className="absolute bottom-full left-0 right-0 mb-1 bg-bg-primary border border-border rounded-lg shadow-lg overflow-hidden z-30 max-h-52 overflow-y-auto">
