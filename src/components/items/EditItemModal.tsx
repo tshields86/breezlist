@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
+import { useKeyboardInset } from '@/hooks/useKeyboardInset.ts'
 import type { ItemUnit } from '@/types/index.ts'
 
 interface EditItemModalProps {
@@ -44,6 +45,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
   const [notes, setNotes] = useState(item.notes ?? '')
   const [categoryId, setCategoryId] = useState(item.categoryId ?? '')
   const [loading, setLoading] = useState(false)
+  const keyboardInset = useKeyboardInset()
 
   useModalDismiss(open, onClose)
 
@@ -66,9 +68,12 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ paddingBottom: keyboardInset }}
+    >
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl">
+      <div className="relative w-full max-w-md max-h-full overflow-y-auto bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl">
         <h2 className="text-lg font-semibold text-text-primary mb-4">Edit Item</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -15,9 +15,12 @@ interface ItemAutocompleteProps {
 export function ItemAutocomplete({ suggestions, onSelect, visible }: ItemAutocompleteProps) {
   if (!visible || suggestions.length === 0) return null
 
+  // Keep the popup compact on mobile so it doesn't bury the list behind it.
+  const shown = suggestions.slice(0, 5)
+
   return (
-    <div className="absolute bottom-full left-0 right-0 mb-1 bg-bg-primary border border-border rounded-lg shadow-lg overflow-hidden z-30 max-h-60 overflow-y-auto">
-      {suggestions.map((item, i) => (
+    <div className="absolute bottom-full left-0 right-0 mb-1 bg-bg-primary border border-border rounded-lg shadow-lg overflow-hidden z-30 max-h-52 overflow-y-auto">
+      {shown.map((item, i) => (
         <button
           key={`${item.text_display}-${i}`}
           type="button"
@@ -26,7 +29,7 @@ export function ItemAutocomplete({ suggestions, onSelect, visible }: ItemAutocom
             onSelect(item.text_display, item.category_hint)
           }}
           className={cn(
-            'w-full flex items-center justify-between px-4 py-2.5 text-left',
+            'w-full flex items-center justify-between px-4 py-2 text-left',
             'hover:bg-bg-secondary transition-colors',
             i > 0 && 'border-t border-border',
           )}

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { cn } from '@/lib/utils.ts'
 import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
+import { useKeyboardInset } from '@/hooks/useKeyboardInset.ts'
 import type { ListType } from '@/types/index.ts'
 
 interface CreateListModalProps {
@@ -21,6 +22,7 @@ export function CreateListModal({ open, onClose, onCreate }: CreateListModalProp
   const [name, setName] = useState('')
   const [listType, setListType] = useState<ListType>('general')
   const [loading, setLoading] = useState(false)
+  const keyboardInset = useKeyboardInset()
 
   useModalDismiss(open, onClose)
 
@@ -39,9 +41,12 @@ export function CreateListModal({ open, onClose, onCreate }: CreateListModalProp
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ paddingBottom: keyboardInset }}
+    >
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl">
+      <div className="relative w-full max-w-md max-h-full overflow-y-auto bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl">
         <h2 className="text-lg font-semibold text-text-primary mb-4">New List</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabase.ts'
 import { useAuth } from '@/hooks/useAuth.ts'
 import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
+import { useKeyboardInset } from '@/hooks/useKeyboardInset.ts'
 
 interface Member {
   user_id: string
@@ -24,6 +25,7 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
+  const keyboardInset = useKeyboardInset()
 
   useModalDismiss(open, onClose)
 
@@ -110,9 +112,12 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+      style={{ paddingBottom: keyboardInset }}
+    >
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl max-h-[80vh] overflow-y-auto">
+      <div className="relative w-full max-w-md bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl max-h-full overflow-y-auto">
         <h2 className="text-lg font-semibold text-text-primary mb-4">Share List</h2>
 
         {isOwner && (
