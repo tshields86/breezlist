@@ -73,95 +73,97 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
       style={{ paddingBottom: keyboardInset }}
     >
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative w-full max-w-md max-h-full overflow-y-auto bg-bg-primary rounded-t-2xl sm:rounded-2xl p-6 shadow-xl">
-        <h2 className="text-lg font-semibold text-text-primary mb-4">Edit Item</h2>
+      <div className="relative w-full max-w-md max-h-full flex flex-col bg-bg-primary rounded-t-2xl sm:rounded-2xl shadow-xl">
+        <h2 className="shrink-0 text-lg font-semibold text-text-primary px-6 pt-6 pb-3">Edit Item</h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="edit-text" className="block text-sm font-medium text-text-secondary mb-1">
-              Item
-            </label>
-            <input
-              id="edit-text"
-              type="text"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              required
-              maxLength={500}
-              autoFocus
-              className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
-            />
-          </div>
-
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label htmlFor="edit-qty" className="block text-sm font-medium text-text-secondary mb-1">
-                Quantity
+        <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
+          <div className="flex-1 overflow-y-auto px-6 pb-2 space-y-4">
+            <div>
+              <label htmlFor="edit-text" className="block text-sm font-medium text-text-secondary mb-1">
+                Item
               </label>
               <input
-                id="edit-qty"
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                min="0"
-                step="any"
+                id="edit-text"
+                type="text"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                required
+                maxLength={500}
+                autoFocus
                 className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
-                placeholder="0"
               />
             </div>
-            <div className="flex-1">
-              <label htmlFor="edit-unit" className="block text-sm font-medium text-text-secondary mb-1">
-                Unit
-              </label>
-              <select
-                id="edit-unit"
-                value={unit}
-                onChange={(e) => setUnit(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
-              >
-                <option value="">None</option>
-                {units.map((u) => (
-                  <option key={u.value} value={u.value}>{u.label}</option>
-                ))}
-              </select>
+
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label htmlFor="edit-qty" className="block text-sm font-medium text-text-secondary mb-1">
+                  Quantity
+                </label>
+                <input
+                  id="edit-qty"
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  min="0"
+                  step="any"
+                  className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex-1">
+                <label htmlFor="edit-unit" className="block text-sm font-medium text-text-secondary mb-1">
+                  Unit
+                </label>
+                <select
+                  id="edit-unit"
+                  value={unit}
+                  onChange={(e) => setUnit(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  <option value="">None</option>
+                  {units.map((u) => (
+                    <option key={u.value} value={u.value}>{u.label}</option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label htmlFor="edit-notes" className="block text-sm font-medium text-text-secondary mb-1">
-              Notes
-            </label>
-            <textarea
-              id="edit-notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              maxLength={1000}
-              rows={2}
-              className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent resize-none"
-              placeholder="Optional notes..."
-            />
-          </div>
-
-          {categories && categories.length > 0 && (
             <div>
-              <label htmlFor="edit-category" className="block text-sm font-medium text-text-secondary mb-1">
-                Group
+              <label htmlFor="edit-notes" className="block text-sm font-medium text-text-secondary mb-1">
+                Notes
               </label>
-              <select
-                id="edit-category"
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
-              >
-                <option value="">No group</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
+              <textarea
+                id="edit-notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                maxLength={1000}
+                rows={2}
+                className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent resize-none"
+                placeholder="Optional notes..."
+              />
             </div>
-          )}
 
-          <div className="flex gap-3 pt-2">
+            {categories && categories.length > 0 && (
+              <div>
+                <label htmlFor="edit-category" className="block text-sm font-medium text-text-secondary mb-1">
+                  Group
+                </label>
+                <select
+                  id="edit-category"
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  <option value="">No group</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3 px-6 py-4 shrink-0 border-t border-border">
             <button
               type="button"
               onClick={onDelete}
