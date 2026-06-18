@@ -83,6 +83,7 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
             onBlur={() => setFocused(false)}
             placeholder="Add an item..."
             maxLength={500}
+            autoComplete="off"
             className="flex-1 px-3 py-2.5 rounded-lg border border-border bg-bg-secondary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <button

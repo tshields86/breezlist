@@ -77,7 +77,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
         <h2 className="shrink-0 text-lg font-semibold text-text-primary px-6 pt-6 pb-3">Edit Item</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
-          <div className="flex-1 overflow-y-auto px-6 pb-2 space-y-4">
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-2 space-y-4">
             <div>
               <label htmlFor="edit-text" className="block text-sm font-medium text-text-secondary mb-1">
                 Item
@@ -89,6 +89,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
                 onChange={(e) => setText(e.target.value)}
                 required
                 maxLength={500}
+                autoComplete="off"
                 autoFocus
                 className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
               />
@@ -106,6 +107,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
                   onChange={(e) => setQuantity(e.target.value)}
                   min="0"
                   step="any"
+                  autoComplete="off"
                   className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
                   placeholder="0"
                 />
@@ -138,6 +140,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
                 onChange={(e) => setNotes(e.target.value)}
                 maxLength={1000}
                 rows={2}
+                autoComplete="off"
                 className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent resize-none"
                 placeholder="Optional notes..."
               />
