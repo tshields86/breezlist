@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -35,7 +35,6 @@ export default function ListView() {
   const [list, setList] = useState<List | null>(null)
   const [listLoading, setListLoading] = useState(true)
   const [editingItem, setEditingItem] = useState<Item | null>(null)
-  const pendingScrollId = useRef<string | null>(null)
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState('')
   const [showMenu, setShowMenu] = useState(false)
@@ -187,28 +186,6 @@ export default function ListView() {
     setEditingItem(null)
   }, [editingItem, deleteItem])
 
-  const handleAddItem = useCallback(async (input: {
-    text: string
-    quantity?: number | null
-    unit?: string | null
-    notes?: string | null
-  }) => {
-    const created = await addItem(input)
-    if (created) pendingScrollId.current = created.id
-    return created
-  }, [addItem])
-
-  // Scroll the newly added item into view once it has rendered.
-  useEffect(() => {
-    const id = pendingScrollId.current
-    if (!id) return
-    pendingScrollId.current = null
-    document.getElementById(`item-${id}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    })
-  }, [sortedActiveItems])
-
   if (listLoading || itemsLoading) {
     return (
       <div className="flex items-center justify-center py-16">
@@ -336,8 +313,11 @@ export default function ListView() {
         )}
       </div>
 
+      {/* Add item input — anchored at the top, above the list */}
+      <AddItemInput onAdd={addItem} />
+
       {/* Items list */}
-      <div className="flex-1 overflow-y-auto pb-24">
+      <div className="flex-1 overflow-y-auto">
         {sortedActiveItems.length === 0 && completedItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
             <div className="text-5xl mb-4">🛒</div>
@@ -549,9 +529,6 @@ export default function ListView() {
           </>
         )}
       </div>
-
-      {/* Add item input */}
-      <AddItemInput onAdd={handleAddItem} />
 
       {/* Edit modal */}
       {editingItem && (

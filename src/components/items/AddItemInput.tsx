@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, type FormEvent, type KeyboardEvent } from 'react'
 import { useItemHistory } from '@/hooks/useItemHistory.ts'
-import { useKeyboardInset } from '@/hooks/useKeyboardInset.ts'
 import { ItemAutocomplete } from '@/components/items/ItemAutocomplete.tsx'
 
 interface AddItemInputProps {
@@ -19,7 +18,6 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   const justSubmitted = useRef(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const { suggestions, searchHistory, getFrequentItems, clearSuggestions } = useItemHistory()
-  const keyboardInset = useKeyboardInset()
 
   useEffect(() => {
     if (!focused) return
@@ -62,11 +60,8 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   }
 
   return (
-    <div
-      className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom,0px))] left-0 right-0 bg-bg-primary border-t border-border z-30"
-      style={keyboardInset > 0 ? { bottom: keyboardInset } : undefined}
-    >
-      <div className="relative max-w-lg mx-auto px-4 py-3">
+    <div className="sticky top-[3.5rem] z-30 bg-bg-primary border-b border-border">
+      <div className="relative px-4 py-3">
         <ItemAutocomplete
           suggestions={suggestions}
           onSelect={handleSuggestionSelect}

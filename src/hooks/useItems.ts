@@ -44,8 +44,10 @@ export function useItems(listId: string | undefined) {
   }) => {
     if (!listId || !user) return null
 
-    const maxSortOrder = items.length > 0
-      ? Math.max(...items.filter((i) => !i.is_completed).map((i) => i.sort_order))
+    // New items go to the top of the list (lowest sort_order), so they appear
+    // right under the top-anchored add bar instead of at the far bottom.
+    const minSortOrder = items.length > 0
+      ? Math.min(...items.filter((i) => !i.is_completed).map((i) => i.sort_order))
       : 0
 
     const { data, error } = await supabase
@@ -57,7 +59,7 @@ export function useItems(listId: string | undefined) {
         unit: input.unit ?? null,
         notes: input.notes ?? null,
         category_id: input.category_id ?? null,
-        sort_order: maxSortOrder + 1,
+        sort_order: minSortOrder - 1,
         created_by: user.id,
       })
       .select()
@@ -68,7 +70,7 @@ export function useItems(listId: string | undefined) {
       return null
     }
 
-    setItems((prev) => [...prev, data])
+    setItems((prev) => [data, ...prev])
     return data
   }, [listId, user, items])
 
