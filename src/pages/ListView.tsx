@@ -59,7 +59,11 @@ export default function ListView() {
 
   const { categories, addCategory, renameCategory, deleteCategory } = useCategories(id)
 
-  useRealtime({ listId: id, onItemChange: refetchItems })
+  const handleRealtimeChange = useCallback(() => {
+    refetchItems({ silent: true })
+  }, [refetchItems])
+
+  useRealtime({ listId: id, onItemChange: handleRealtimeChange })
 
   const sortPreference = (list?.sort_preference ?? 'manual') as SortPreference
 
