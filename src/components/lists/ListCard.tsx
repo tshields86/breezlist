@@ -35,36 +35,37 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
     <button
       onClick={onClick}
       className={cn(
-        'w-full text-left p-4 rounded-xl border border-border',
-        'bg-bg-primary hover:bg-bg-secondary transition-colors',
+        'shadow-soft w-full rounded-2xl border border-border p-4 text-left',
+        'bg-bg-secondary transition-all hover:-translate-y-0.5 hover:border-accent/40',
         'focus:outline-none focus:ring-2 focus:ring-accent',
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-lg">{typeEmoji[listType] ?? '📝'}</span>
-            <h3 className="font-semibold text-text-primary truncate">{name}</h3>
-          </div>
-          <div className="flex items-center gap-3 text-sm text-text-muted">
+      <div className="flex items-center gap-3">
+        <span className="grad-chip grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xl">
+          {typeEmoji[listType] ?? '📝'}
+        </span>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate font-bold text-text-primary">{name}</h3>
+          <div className="mt-0.5 flex items-center gap-2 text-sm font-medium text-text-muted">
             <span>{itemCount} {itemCount === 1 ? 'item' : 'items'}</span>
+            <span aria-hidden>·</span>
             <span>{timeAgo}</span>
           </div>
         </div>
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex shrink-0 items-center gap-1">
           {members.length > 0 && (
             <div className="flex -space-x-2">
               {members.slice(0, 3).map((m, i) => (
                 <div
                   key={i}
-                  className="w-7 h-7 rounded-full bg-bg-tertiary border-2 border-bg-primary flex items-center justify-center text-xs font-medium text-text-secondary"
+                  className="grad-sky flex h-7 w-7 items-center justify-center rounded-full border-2 border-bg-secondary text-xs font-bold text-white"
                   title={m.profile?.display_name ?? 'Member'}
                 >
                   {m.profile?.display_name?.[0]?.toUpperCase() ?? '?'}
                 </div>
               ))}
               {members.length > 3 && (
-                <div className="w-7 h-7 rounded-full bg-bg-tertiary border-2 border-bg-primary flex items-center justify-center text-xs font-medium text-text-muted">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-bg-secondary bg-bg-tertiary text-xs font-bold text-text-muted">
                   +{members.length - 3}
                 </div>
               )}
@@ -73,7 +74,7 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
           {isOwner && onDelete && (
             <button
               onClick={handleDelete}
-              className="ml-2 p-1.5 rounded-lg text-text-muted hover:text-danger hover:bg-bg-tertiary transition-colors"
+              className="ml-1 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-tertiary hover:text-danger"
               aria-label="Delete list"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
