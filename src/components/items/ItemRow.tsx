@@ -43,10 +43,10 @@ export function ItemRow({
       <button
         onClick={onToggleComplete}
         className={cn(
-          'mt-0.5 shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors',
+          'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors',
           isCompleted
-            ? 'bg-accent border-accent'
-            : 'border-border hover:border-accent',
+            ? 'grad-sky border-transparent'
+            : 'border-text-muted/40 hover:border-accent',
         )}
         aria-label={isCompleted ? 'Mark incomplete' : 'Mark complete'}
       >
@@ -63,8 +63,8 @@ export function ItemRow({
       >
         <div className="flex items-center gap-2">
           <span className={cn(
-            'text-text-primary',
-            isCompleted && 'line-through text-text-muted',
+            'font-medium text-text-primary',
+            isCompleted && 'text-text-muted line-through',
           )}>
             {text}
           </span>

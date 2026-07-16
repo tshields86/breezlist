@@ -60,7 +60,7 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   }
 
   return (
-    <div className="sticky top-[3.5rem] z-30 bg-bg-primary border-b border-border">
+    <div className="sticky top-16 z-30 glass border-b border-border">
       <div className="relative px-4 py-3">
         <ItemAutocomplete
           suggestions={suggestions}
@@ -76,15 +76,15 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
             onKeyDown={handleKeyDown}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder="Add an item..."
+            placeholder="Add an item…"
             maxLength={500}
             autoComplete="off"
-            className="flex-1 px-3 py-2.5 rounded-lg border border-border bg-bg-secondary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+            className="flex-1 rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary placeholder:text-text-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <button
             type="submit"
             disabled={!text.trim() || loading}
-            className="px-4 py-2.5 rounded-lg bg-accent text-white font-medium hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+            className="grad-sky shadow-sky flex w-12 shrink-0 items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             aria-label="Add item"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

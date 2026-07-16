@@ -14,15 +14,15 @@ const modes: Array<{ value: SortPreference; label: string }> = [
 
 export function SortModeSelector({ value, onChange }: SortModeSelectorProps) {
   return (
-    <div className="flex items-center gap-1 bg-bg-tertiary rounded-lg p-0.5">
+    <div className="flex items-center gap-1 rounded-xl bg-bg-tertiary p-1">
       {modes.map((mode) => (
         <button
           key={mode.value}
           onClick={() => onChange(mode.value)}
           className={cn(
-            'px-3 py-1 text-xs font-medium rounded-md transition-colors',
+            'rounded-lg px-3 py-1 text-xs font-bold transition-colors',
             value === mode.value
-              ? 'bg-bg-primary text-text-primary shadow-sm'
+              ? 'bg-bg-secondary text-accent shadow-sm'
               : 'text-text-muted hover:text-text-secondary',
           )}
         >

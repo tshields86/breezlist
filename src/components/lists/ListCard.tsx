@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils.ts'
+import { emojiForListType } from '@/lib/listTypes.ts'
 import type { MouseEvent } from 'react'
 
 interface ListCardProps {
@@ -13,14 +14,6 @@ interface ListCardProps {
   }>
   onClick: () => void
   onDelete?: () => void
-}
-
-const typeEmoji: Record<string, string> = {
-  grocery: '🛒',
-  todo: '✅',
-  packing: '🧳',
-  gift: '🎁',
-  general: '📝',
 }
 
 export function ListCard({ name, listType, itemCount, updatedAt, isOwner, members, onClick, onDelete }: ListCardProps) {
@@ -42,7 +35,7 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
     >
       <div className="flex items-center gap-3">
         <span className="grad-chip grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xl">
-          {typeEmoji[listType] ?? '📝'}
+          {emojiForListType(listType)}
         </span>
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-bold text-text-primary">{name}</h3>
