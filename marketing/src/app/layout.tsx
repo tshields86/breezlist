@@ -1,7 +1,15 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { Onest } from 'next/font/google'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import '@/styles/globals.css'
+
+const onest = Onest({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-onest',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Breezlist — Simple shared lists for everyone',
@@ -44,6 +52,13 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://breezlist.com'),
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f8ff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b1220' },
+  ],
+}
+
 function ThemeScript() {
   const script = `
     (function() {
@@ -62,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={onest.variable} suppressHydrationWarning>
       <head>
         <ThemeScript />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
