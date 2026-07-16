@@ -37,8 +37,8 @@ const units: Array<{ value: ItemUnit; label: string }> = [
   { value: 'pack', label: 'pack' },
 ]
 
-const fieldClass = 'w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent'
-const labelClass = 'block text-sm font-medium text-text-secondary mb-1'
+const fieldClass = 'w-full rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent'
+const labelClass = 'mb-1.5 block text-sm font-semibold text-text-secondary'
 
 export function EditItemModal({ open, onClose, item, categories, onSave, onDelete }: EditItemModalProps) {
   const [text, setText] = useState(item.text)
@@ -160,7 +160,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
         <button
           type="button"
           onClick={onDelete}
-          className="w-full mt-2 py-2.5 px-4 rounded-lg border border-danger text-danger font-medium hover:bg-danger hover:text-white transition-colors"
+          className="mt-2 w-full rounded-xl border border-danger px-4 py-3 font-bold text-danger transition-colors hover:bg-danger hover:text-white"
         >
           Delete item
         </button>

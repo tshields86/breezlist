@@ -42,11 +42,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={t.id}
             className={cn(
-              'px-4 py-2.5 rounded-lg shadow-lg text-sm font-medium pointer-events-auto',
+              'shadow-soft pointer-events-auto rounded-xl px-4 py-2.5 text-sm font-semibold',
               'animate-[fadeInUp_0.2s_ease-out]',
               t.type === 'success' && 'bg-success text-white',
               t.type === 'error' && 'bg-danger text-white',
-              t.type === 'info' && 'bg-bg-tertiary text-text-primary',
+              t.type === 'info' && 'glass text-text-primary',
             )}
           >
             {t.message}

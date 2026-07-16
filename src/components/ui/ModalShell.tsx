@@ -36,21 +36,21 @@ export function ModalShell({ open, onClose, title, left, right, children }: Moda
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="relative flex flex-col w-full h-full bg-bg-primary overflow-hidden sm:h-auto sm:max-h-[85vh] sm:max-w-md sm:rounded-2xl sm:shadow-xl"
+        className="shadow-soft relative flex h-full w-full flex-col overflow-hidden bg-bg-primary sm:h-auto sm:max-h-[85vh] sm:max-w-md sm:rounded-3xl"
       >
-        <header className="shrink-0 flex items-center justify-between gap-2 h-14 px-2 border-b border-border">
-          <div className="flex-1 flex justify-start">
+        <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-2">
+          <div className="flex flex-1 justify-start">
             {left ?? (
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3 py-2 rounded-lg text-text-secondary font-medium hover:bg-bg-secondary transition-colors"
+                className="rounded-lg px-3 py-2 font-semibold text-text-secondary transition-colors hover:bg-bg-tertiary"
               >
                 Cancel
               </button>
             )}
           </div>
-          <h2 className="text-base font-semibold text-text-primary whitespace-nowrap">{title}</h2>
+          <h2 className="whitespace-nowrap text-base font-bold text-text-primary">{title}</h2>
           <div className="flex-1 flex justify-end">{right}</div>
         </header>
 

@@ -19,7 +19,7 @@ export function ItemAutocomplete({ suggestions, onSelect, visible }: ItemAutocom
   const shown = suggestions.slice(0, 3)
 
   return (
-    <div className="absolute top-full left-0 right-0 mt-1 bg-bg-primary border border-border rounded-lg shadow-lg overflow-hidden z-30 max-h-52 overflow-y-auto">
+    <div className="shadow-soft absolute left-0 right-0 top-full z-30 mt-1 max-h-52 overflow-y-auto overflow-hidden rounded-xl border border-border bg-bg-secondary">
       {shown.map((item, i) => (
         <button
           key={`${item.text_display}-${i}`}
@@ -29,12 +29,12 @@ export function ItemAutocomplete({ suggestions, onSelect, visible }: ItemAutocom
             onSelect(item.text_display, item.category_hint)
           }}
           className={cn(
-            'w-full flex items-center justify-between px-4 py-2 text-left',
-            'hover:bg-bg-secondary transition-colors',
+            'flex w-full items-center justify-between px-4 py-2.5 text-left',
+            'transition-colors hover:bg-bg-tertiary',
             i > 0 && 'border-t border-border',
           )}
         >
-          <span className="text-text-primary">{item.text_display}</span>
+          <span className="font-medium text-text-primary">{item.text_display}</span>
           <span className="text-xs text-text-muted ml-2 shrink-0">
             {item.frequency > 1 ? `${item.frequency}x` : 'once'}
           </span>
