@@ -11,9 +11,12 @@ export function useItems(listId: string | undefined) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchItems = useCallback(async () => {
+  // `silent` refetches (e.g. from realtime) skip the loading flag so the list
+  // updates in place instead of flashing the full-page spinner on every remote
+  // change.
+  const fetchItems = useCallback(async (opts?: { silent?: boolean }) => {
     if (!listId) return
-    setLoading(true)
+    if (!opts?.silent) setLoading(true)
     setError(null)
 
     const { data, error: fetchError } = await supabase
