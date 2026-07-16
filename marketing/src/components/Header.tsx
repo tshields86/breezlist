@@ -34,26 +34,30 @@ export function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
-        scrolled
-          ? 'bg-bg-primary/80 backdrop-blur-md border-b border-border shadow-sm'
-          : 'bg-transparent'
+        scrolled ? 'glass border-b border-border' : 'bg-transparent'
       }`}
     >
-      <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
+      <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-3.5">
         <a href="/" aria-label="Breezlist home">
-          <Logo className="text-2xl" />
+          <Logo withMark markSize={32} className="text-xl" />
         </a>
 
-        <div className="flex items-center gap-8">
-          <a href="#features" className="hidden sm:block text-sm text-text-secondary hover:text-text-primary transition-colors">
+        <div className="flex items-center gap-6 sm:gap-8">
+          <a
+            href="#features"
+            className="hidden sm:block text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+          >
             Features
           </a>
-          <a href="#how-it-works" className="hidden sm:block text-sm text-text-secondary hover:text-text-primary transition-colors">
-            How It Works
+          <a
+            href="#how-it-works"
+            className="hidden sm:block text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+          >
+            How it works
           </a>
           <button
             onClick={toggleTheme}
-            aria-label="Toggle dark mode"
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
             className="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-tertiary transition-colors"
           >
             {dark ? (
@@ -77,9 +81,9 @@ export function Header() {
 
           <a
             href="https://app.breezlist.com/signup"
-            className="inline-flex items-center px-4 py-2 rounded-lg bg-accent text-white text-sm font-medium hover:bg-accent-hover transition-colors"
+            className="grad-sky shadow-sky inline-flex items-center px-4 py-2 rounded-xl text-white text-sm font-bold transition-transform hover:-translate-y-0.5"
           >
-            Get Started
+            Open app
           </a>
         </div>
       </div>
