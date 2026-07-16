@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState, type ReactNode } from 'react'
 import type { ThemeMode } from '@/types/index.ts'
+import { applyThemeColorMeta, getStoredTheme, getSystemTheme, persistTheme } from '@/lib/theme.ts'
 
 interface ThemeContextValue {
   theme: ThemeMode
@@ -9,20 +10,6 @@ interface ThemeContextValue {
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-const STORAGE_KEY = 'breezlist-theme'
-
-function getSystemTheme(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'light'
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
-function getStoredTheme(): ThemeMode {
-  if (typeof window === 'undefined') return 'system'
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
-  return 'system'
-}
-
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeMode>(getStoredTheme)
   const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(getSystemTheme)
@@ -31,7 +18,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
     setThemeState(newTheme)
-    localStorage.setItem(STORAGE_KEY, newTheme)
+    persistTheme(newTheme)
   }, [])
 
   useEffect(() => {
@@ -42,12 +29,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    const root = document.documentElement
-    if (resolvedTheme === 'dark') {
-      root.classList.add('dark')
-    } else {
-      root.classList.remove('dark')
-    }
+    document.documentElement.classList.toggle('dark', resolvedTheme === 'dark')
+    applyThemeColorMeta(resolvedTheme)
   }, [resolvedTheme])
 
   return (
