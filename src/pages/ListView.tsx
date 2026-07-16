@@ -16,6 +16,7 @@ import { AddItemInput } from '@/components/items/AddItemInput.tsx'
 import { EditItemModal } from '@/components/items/EditItemModal.tsx'
 import { CategoryGroup } from '@/components/items/CategoryGroup.tsx'
 import { SortModeSelector } from '@/components/items/SortModeSelector.tsx'
+import { emojiForListType } from '@/lib/listTypes.ts'
 import type { Database } from '@/lib/database.types.ts'
 import type { SortPreference } from '@/types/index.ts'
 
@@ -217,6 +218,8 @@ export default function ListView() {
             </svg>
           </button>
 
+          <span className="shrink-0 text-xl" aria-hidden>{emojiForListType(list.list_type)}</span>
+
           {isRenaming ? (
             <input
               value={newName}
@@ -231,12 +234,12 @@ export default function ListView() {
               }}
               autoFocus
               maxLength={100}
-              className="flex-1 text-lg font-semibold text-text-primary bg-transparent border-b-2 border-accent focus:outline-none"
+              className="flex-1 border-b-2 border-accent bg-transparent text-lg font-bold text-text-primary focus:outline-none"
             />
           ) : (
             <button
               onClick={() => setIsRenaming(true)}
-              className="flex-1 text-left text-lg font-semibold text-text-primary truncate hover:text-accent transition-colors"
+              className="flex-1 truncate text-left text-lg font-bold text-text-primary transition-colors hover:text-accent"
             >
               {list.name}
             </button>
@@ -256,7 +259,7 @@ export default function ListView() {
             {showMenu && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                <div className="absolute right-0 top-full mt-1 w-48 bg-bg-primary border border-border rounded-lg shadow-lg z-50 py-1">
+                <div className="shadow-soft absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-border bg-bg-secondary py-1.5">
                   <button
                     onClick={() => {
                       setIsRenaming(true)
@@ -323,10 +326,12 @@ export default function ListView() {
       {/* Items list */}
       <div className="flex-1 overflow-y-auto">
         {sortedActiveItems.length === 0 && completedItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-            <div className="text-5xl mb-4">🛒</div>
-            <h3 className="text-lg font-semibold text-text-primary mb-2">No items yet</h3>
-            <p className="text-text-secondary">Start adding items below</p>
+          <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
+            <span className="grad-chip mb-4 grid h-16 w-16 place-items-center rounded-2xl text-3xl">
+              {emojiForListType(list.list_type)}
+            </span>
+            <h3 className="mb-2 text-lg font-bold text-text-primary">No items yet</h3>
+            <p className="text-text-secondary">Add your first item up top.</p>
           </div>
         ) : (
           <>
@@ -368,7 +373,7 @@ export default function ListView() {
                     })}
                     {(categoryItemsMap.get(null) ?? []).length > 0 && (
                       <div className="mb-2">
-                        <div className="px-4 py-2 bg-bg-secondary text-sm font-semibold text-text-muted uppercase tracking-wider">
+                        <div className="bg-bg-tertiary px-4 py-2 text-xs font-bold uppercase tracking-wider text-text-muted">
                           Uncategorized
                         </div>
                         {categoryItemsMap.get(null)!.map((item) => (
@@ -498,8 +503,8 @@ export default function ListView() {
             {completedItems.length > 0 && (
               <div className="mt-2">
                 <div className="flex items-center justify-between px-4 py-2">
-                  <span className="text-sm font-medium text-text-muted">
-                    Completed ({completedItems.length})
+                  <span className="text-xs font-bold uppercase tracking-wider text-text-muted">
+                    Completed · {completedItems.length}
                   </span>
                   <button
                     onClick={() => {
@@ -507,7 +512,7 @@ export default function ListView() {
                         clearCompleted()
                       }
                     }}
-                    className="text-sm text-accent hover:underline"
+                    className="text-sm font-semibold text-accent hover:underline"
                   >
                     Clear all
                   </button>

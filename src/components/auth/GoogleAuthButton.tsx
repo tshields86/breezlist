@@ -13,10 +13,10 @@ export function GoogleAuthButton({ onClick, disabled, className }: GoogleAuthBut
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'flex items-center justify-center gap-3 w-full px-4 py-3 rounded-lg border border-border',
-        'bg-bg-primary text-text-primary font-medium',
-        'hover:bg-bg-secondary transition-colors',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
+        'flex w-full items-center justify-center gap-3 rounded-xl border border-border px-4 py-3',
+        'bg-bg-secondary font-semibold text-text-primary',
+        'transition-colors hover:bg-bg-tertiary',
+        'disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
     >

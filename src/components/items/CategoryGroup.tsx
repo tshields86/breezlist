@@ -24,7 +24,7 @@ export function CategoryGroup({ name, itemCount, children, onRename, onDelete }:
 
   return (
     <div className="mb-2">
-      <div className="flex items-center gap-2 px-4 py-2 bg-bg-secondary">
+      <div className="flex items-center gap-2 bg-bg-tertiary px-4 py-2">
         <button
           onClick={() => setCollapsed(!collapsed)}
           className="text-text-muted hover:text-text-secondary transition-colors"

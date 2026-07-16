@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useAuth } from '@/hooks/useAuth.ts'
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton.tsx'
+import { TextField } from '@/components/ui/TextField.tsx'
 
 interface LoginFormProps {
   onSwitchToSignup: () => void
@@ -34,38 +35,28 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
+    <div className="space-y-5">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="login-email" className="block text-sm font-medium text-text-secondary mb-1">
-            Email
-          </label>
-          <input
-            id="login-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
-            placeholder="you@example.com"
-          />
-        </div>
-        <div>
-          <label htmlFor="login-password" className="block text-sm font-medium text-text-secondary mb-1">
-            Password
-          </label>
-          <input
-            id="login-password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-            className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
-            placeholder="Your password"
-          />
-        </div>
+        <TextField
+          id="login-email"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+          placeholder="you@example.com"
+        />
+        <TextField
+          id="login-password"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+          placeholder="Your password"
+        />
 
         {error && (
           <p className="text-sm text-danger" role="alert">{error}</p>
@@ -74,26 +65,23 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2.5 px-4 rounded-lg bg-accent text-white font-medium hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="grad-sky shadow-sky w-full rounded-xl py-3 font-bold text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
         >
-          {loading ? 'Signing in...' : 'Sign in'}
+          {loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-bg-primary text-text-muted">or</span>
-        </div>
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-sm text-text-muted">or</span>
+        <div className="h-px flex-1 bg-border" />
       </div>
 
       <GoogleAuthButton onClick={handleGoogle} />
 
       <p className="text-center text-sm text-text-secondary">
         Don&apos;t have an account?{' '}
-        <button onClick={onSwitchToSignup} className="text-accent hover:underline font-medium">
+        <button onClick={onSwitchToSignup} className="font-semibold text-accent hover:underline">
           Sign up
         </button>
       </p>

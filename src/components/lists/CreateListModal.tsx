@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { cn } from '@/lib/utils.ts'
 import { ModalShell } from '@/components/ui/ModalShell.tsx'
+import { TextField } from '@/components/ui/TextField.tsx'
 import type { ListType } from '@/types/index.ts'
 
 interface CreateListModalProps {
@@ -50,26 +51,21 @@ export function CreateListModal({ open, onClose, onCreate }: CreateListModalProp
         </button>
       }
     >
-      <form id="create-list-form" onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="list-name" className="block text-sm font-medium text-text-secondary mb-1">
-            Name
-          </label>
-          <input
-            id="list-name"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            maxLength={100}
-            autoComplete="off"
-            className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
-            placeholder="e.g., Weekly Groceries"
-          />
-        </div>
+      <form id="create-list-form" onSubmit={handleSubmit} className="space-y-5">
+        <TextField
+          id="list-name"
+          label="Name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          maxLength={100}
+          autoComplete="off"
+          placeholder="e.g., Weekly Groceries"
+        />
 
         <div>
-          <label className="block text-sm font-medium text-text-secondary mb-2">Type</label>
+          <label className="mb-2 block text-sm font-semibold text-text-secondary">Type</label>
           <div className="flex flex-wrap gap-2">
             {listTypes.map((type) => (
               <button
@@ -77,10 +73,10 @@ export function CreateListModal({ open, onClose, onCreate }: CreateListModalProp
                 type="button"
                 onClick={() => setListType(type.value)}
                 className={cn(
-                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                  'rounded-xl px-3.5 py-2 text-sm font-semibold transition-colors',
                   listType === type.value
-                    ? 'bg-accent text-white'
-                    : 'bg-bg-tertiary text-text-secondary hover:bg-bg-secondary',
+                    ? 'grad-sky text-white'
+                    : 'bg-bg-tertiary text-text-secondary hover:text-text-primary',
                 )}
               >
                 {type.emoji} {type.label}

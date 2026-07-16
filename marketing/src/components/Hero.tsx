@@ -1,97 +1,98 @@
-import { Logo } from './Logo'
+const heroItems = [
+  { text: 'Avocados', qty: '×3', starred: true, done: false },
+  { text: 'Sourdough', qty: null, starred: false, done: false },
+  { text: 'Cherry tomatoes', qty: null, starred: false, done: false },
+  { text: 'Oat milk', qty: null, starred: false, done: true },
+  { text: 'Olive oil', qty: null, starred: false, done: true },
+]
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-accent/5 rounded-full blur-3xl" />
-      </div>
+    <section className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+      {/* Dawn sky */}
+      <div className="grad-dawn absolute inset-0 -z-10 opacity-90" />
+      <div className="sun-glow absolute -top-40 left-1/2 -z-10 h-[560px] w-[560px] -translate-x-1/2 rounded-full" />
 
-      <div className="mx-auto max-w-6xl px-6 text-center">
-        <div className="animate-fade-in-up">
-          <Logo className="text-5xl sm:text-6xl" />
-        </div>
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="text-center lg:text-left">
+          <p className="animate-fade-in-up text-xs font-bold uppercase tracking-[0.18em] text-accent">
+            Shared lists, the easy way
+          </p>
+          <h1 className="animate-fade-in-up-delay-1 mt-4 text-5xl font-extrabold leading-[1.02] tracking-tight text-text-primary sm:text-6xl lg:text-7xl">
+            Lists that feel
+            <br className="hidden sm:block" /> like a <span className="grad-text">breeze</span>.
+          </h1>
+          <p className="animate-fade-in-up-delay-2 mx-auto mt-6 max-w-xl text-lg text-text-secondary lg:mx-0">
+            Make a list, share a link, check things off together — in real time.
+            Groceries, packing, gifts, to-dos, anything.
+          </p>
 
-        <h1 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-text-primary animate-fade-in-up-delay-1">
-          Simple shared lists
-          <br />
-          that actually work
-        </h1>
+          <div className="animate-fade-in-up-delay-3 mt-9 flex flex-col items-center gap-3 sm:flex-row sm:gap-4 lg:justify-start">
+            <a
+              href="https://app.breezlist.com/signup"
+              className="grad-sky shadow-sky inline-flex w-full items-center justify-center rounded-2xl px-7 py-3.5 text-lg font-bold text-white transition-transform hover:-translate-y-0.5 sm:w-auto"
+            >
+              Start a list — it&apos;s free
+            </a>
+            <a
+              href="#how-it-works"
+              className="glass inline-flex w-full items-center justify-center rounded-2xl px-7 py-3.5 text-lg font-semibold text-text-primary transition-transform hover:-translate-y-0.5 sm:w-auto"
+            >
+              See how it works
+            </a>
+          </div>
 
-        <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl text-text-secondary animate-fade-in-up-delay-2">
-          Stop texting lists back and forth. Create, share, and collaborate in
-          real-time. Groceries, todos, packing, gifts, and more.
-        </p>
-
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up-delay-3">
-          <a
-            href="https://app.breezlist.com/signup"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-accent text-white font-semibold text-lg hover:bg-accent-hover transition-colors shadow-lg shadow-accent/25"
-          >
-            Get Started, It&apos;s Free
-          </a>
-          <a
-            href="#how-it-works"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-xl border border-border text-text-secondary font-medium text-lg hover:bg-bg-secondary transition-colors"
-          >
-            See How It Works
-          </a>
-        </div>
-
-        {/* Phone mockup */}
-        <div className="mt-16 mx-auto max-w-sm">
-          <div className="relative mx-auto w-[280px] h-[560px] rounded-[3rem] border-4 border-border bg-bg-secondary shadow-2xl overflow-hidden">
-            {/* Notch */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-36 h-7 bg-bg-primary rounded-b-2xl" />
-
-            {/* Screen content */}
-            <div className="mt-10 px-4 space-y-3">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-sm font-semibold text-text-primary">Grocery List</span>
-                <span className="text-xs text-text-muted">Shared with 2</span>
-              </div>
-
-              {[
-                { text: 'Avocados', checked: false },
-                { text: 'Sourdough bread', checked: false },
-                { text: 'Oat milk', checked: false },
-                { text: 'Cherry tomatoes', checked: false },
-                { text: 'Pasta', checked: true },
-                { text: 'Olive oil', checked: true },
-              ].map((item) => (
-                <div
-                  key={item.text}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg ${
-                    item.checked ? 'bg-bg-tertiary/50' : 'bg-bg-primary'
-                  }`}
+          <div className="animate-fade-in-up-delay-3 mt-7 flex items-center justify-center gap-3 text-sm text-text-secondary lg:justify-start">
+            <div className="flex">
+              {['A', 'M', 'J'].map((initial, i) => (
+                <span
+                  key={initial}
+                  className="grad-sky grid h-8 w-8 place-items-center rounded-full border-2 border-bg-primary text-xs font-bold text-white"
+                  style={{ marginLeft: i === 0 ? 0 : '-0.5rem' }}
                 >
-                  <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      item.checked
-                        ? 'border-accent bg-accent'
-                        : 'border-border'
-                    }`}
-                  >
-                    {item.checked && (
-                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                        <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    )}
-                  </div>
-                  <span
-                    className={`text-sm ${
-                      item.checked
-                        ? 'line-through text-text-muted'
-                        : 'text-text-primary'
-                    }`}
-                  >
-                    {item.text}
-                  </span>
-                </div>
+                  {initial}
+                </span>
               ))}
             </div>
+            Loved by households, roommates &amp; trip planners
           </div>
+        </div>
+
+        {/* Floating glass list card */}
+        <div className="animate-floaty glass shadow-soft mx-auto w-full max-w-sm rounded-[1.75rem] p-5">
+          <div className="flex items-center justify-between px-1 pb-3.5">
+            <span className="text-base font-extrabold text-text-primary">🛒 Grocery run</span>
+            <span className="text-xs font-bold text-accent">Shared with 2</span>
+          </div>
+          <ul>
+            {heroItems.map((item, i) => (
+              <li
+                key={item.text}
+                className={`flex items-center gap-3 py-3 ${i > 0 ? 'border-t border-border/70' : ''}`}
+              >
+                <span
+                  className={`grid h-[22px] w-[22px] flex-none place-items-center rounded-full border-2 ${
+                    item.done ? 'grad-sky border-transparent' : 'border-text-muted/40'
+                  }`}
+                >
+                  {item.done && (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 12l5 5L20 6" />
+                    </svg>
+                  )}
+                </span>
+                <span className={`text-[15px] font-medium ${item.done ? 'text-text-muted line-through' : 'text-text-primary'}`}>
+                  {item.text}
+                </span>
+                {item.qty && <span className="text-xs font-semibold text-text-muted">{item.qty}</span>}
+                {!item.done && (
+                  <span className={`ml-auto text-[15px] ${item.starred ? 'text-star' : 'text-text-muted/40'}`}>
+                    {item.starred ? '★' : '☆'}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

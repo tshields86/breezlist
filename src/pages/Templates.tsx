@@ -1,13 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useTemplates } from '@/hooks/useTemplates.ts'
-
-const typeEmoji: Record<string, string> = {
-  grocery: '🛒',
-  todo: '✅',
-  packing: '🧳',
-  gift: '🎁',
-  general: '📝',
-}
+import { emojiForListType } from '@/lib/listTypes.ts'
 
 export default function Templates() {
   const navigate = useNavigate()
@@ -36,29 +29,31 @@ export default function Templates() {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold text-text-primary mb-4">Templates</h2>
+      <h2 className="mb-5 text-2xl font-extrabold tracking-tight text-text-primary">Templates</h2>
 
       {templates.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-          <div className="text-5xl mb-4">📋</div>
-          <h3 className="text-lg font-semibold text-text-primary mb-2">No templates yet</h3>
-          <p className="text-text-secondary">Save a list as a template to reuse it later</p>
+        <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
+          <span className="grad-chip mb-4 grid h-16 w-16 place-items-center rounded-2xl text-3xl">📋</span>
+          <h3 className="mb-2 text-lg font-bold text-text-primary">No templates yet</h3>
+          <p className="max-w-xs text-text-secondary">
+            Save a list as a template to reuse it later — perfect for weekly groceries.
+          </p>
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {templates.map((template) => (
             <div
               key={template.id}
-              className="p-4 rounded-xl border border-border bg-bg-primary"
+              className="shadow-soft rounded-2xl border border-border bg-bg-secondary p-4"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{typeEmoji[template.list_type] ?? '📝'}</span>
-                  <h3 className="font-semibold text-text-primary">{template.name}</h3>
-                </div>
+              <div className="mb-3 flex items-center gap-3">
+                <span className="grad-chip grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xl">
+                  {emojiForListType(template.list_type)}
+                </span>
+                <h3 className="min-w-0 flex-1 truncate font-bold text-text-primary">{template.name}</h3>
                 <button
                   onClick={() => handleDelete(template.id)}
-                  className="p-1.5 rounded-lg text-text-muted hover:text-danger transition-colors"
+                  className="rounded-lg p-1.5 text-text-muted transition-colors hover:text-danger"
                   aria-label="Delete template"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,9 +64,9 @@ export default function Templates() {
               </div>
               <button
                 onClick={() => handleUseTemplate(template.id)}
-                className="w-full py-2 px-4 rounded-lg bg-accent text-white font-medium hover:bg-accent-hover transition-colors text-sm"
+                className="grad-sky shadow-sky w-full rounded-xl px-4 py-2.5 text-sm font-bold text-white transition-transform hover:-translate-y-0.5"
               >
-                Use Template
+                Use template
               </button>
             </div>
           ))}

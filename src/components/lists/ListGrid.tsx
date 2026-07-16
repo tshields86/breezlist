@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { ListCard } from '@/components/lists/ListCard.tsx'
+import { BrandMark } from '@/components/ui/Mark.tsx'
 import { useAuth } from '@/hooks/useAuth.ts'
 
 interface ListItem {
@@ -28,10 +29,13 @@ export function ListGrid({ ownedLists, sharedLists, onDelete }: ListGridProps) {
 
   if (ownedLists.length === 0 && sharedLists.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-        <div className="text-5xl mb-4">📝</div>
-        <h3 className="text-lg font-semibold text-text-primary mb-2">No lists yet</h3>
-        <p className="text-text-secondary">Tap the + button to create your first list</p>
+      <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
+        <BrandMark size={56} className="mb-5 opacity-90" />
+        <h3 className="mb-2 text-lg font-bold text-text-primary">No lists yet</h3>
+        <p className="max-w-xs text-text-secondary">
+          Tap the <span className="font-semibold text-accent">+</span> button to start your first list —
+          it&apos;s a breeze.
+        </p>
       </div>
     )
   }

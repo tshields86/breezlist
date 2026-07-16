@@ -1,7 +1,15 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import { Onest } from 'next/font/google'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import '@/styles/globals.css'
+
+const onest = Onest({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-onest',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Breezlist — Simple shared lists for everyone',
@@ -44,13 +52,25 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://breezlist.com'),
 }
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f8ff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b1220' },
+  ],
+}
+
 function ThemeScript() {
+  // Reads the shared .breezlist.com cookie first (so the preference carries
+  // over from the app), then localStorage, then the system preference — before
+  // first paint, to avoid a flash.
   const script = `
     (function() {
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      }
+      try {
+        var m = document.cookie.match(/(?:^|; )breezlist-theme=(light|dark|system)/);
+        var t = m ? m[1] : localStorage.getItem('breezlist-theme');
+        var dark = t === 'dark' || ((!t || t === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      } catch (e) {}
     })();
   `
   return <script dangerouslySetInnerHTML={{ __html: script }} />
@@ -62,7 +82,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={onest.variable} suppressHydrationWarning>
       <head>
         <ThemeScript />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

@@ -38,7 +38,7 @@ export function InstallBanner() {
             {hasNativePrompt && (
               <button
                 onClick={install}
-                className="px-3 py-1.5 text-xs font-medium rounded-lg bg-accent text-white hover:bg-accent-hover transition-colors"
+                className="grad-sky rounded-lg px-3 py-1.5 text-xs font-bold text-white transition-transform hover:-translate-y-0.5"
               >
                 Install
               </button>

@@ -63,7 +63,7 @@ export default function Settings() {
 
   return (
     <div className="p-4 space-y-8">
-      <h2 className="text-xl font-semibold text-text-primary">Settings</h2>
+      <h2 className="text-2xl font-extrabold tracking-tight text-text-primary">Settings</h2>
 
       {/* Account */}
       <section className="space-y-4">
@@ -79,21 +79,21 @@ export default function Settings() {
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="flex-1 px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent"
+              className="flex-1 rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent"
             />
             <button
               onClick={handleSaveName}
               disabled={saving || displayName.trim() === originalName}
-              className="px-4 py-2.5 rounded-lg bg-accent text-white font-medium hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="grad-sky shadow-sky shrink-0 rounded-xl px-5 font-bold text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
-              {saving ? 'Saving...' : 'Save'}
+              {saving ? 'Saving…' : 'Save'}
             </button>
           </div>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-text-secondary mb-1">Email</label>
-          <p className="px-3 py-2.5 rounded-lg bg-bg-secondary text-text-muted border border-border">
+          <p className="rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-muted">
             {user?.email ?? '—'}
           </p>
         </div>
@@ -111,10 +111,10 @@ export default function Settings() {
                 key={option.value}
                 onClick={() => setTheme(option.value)}
                 className={cn(
-                  'flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-colors',
+                  'flex-1 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors',
                   theme === option.value
-                    ? 'bg-accent text-white'
-                    : 'bg-bg-tertiary text-text-secondary hover:bg-bg-secondary',
+                    ? 'grad-sky text-white'
+                    : 'bg-bg-tertiary text-text-secondary hover:text-text-primary',
                 )}
               >
                 {option.label}
@@ -128,7 +128,7 @@ export default function Settings() {
       <section className="space-y-4">
         <h3 className="text-sm font-semibold text-danger uppercase tracking-wider">Danger Zone</h3>
 
-        <div className="p-4 rounded-lg border border-danger/30 space-y-3">
+        <div className="space-y-3 rounded-2xl border border-danger/30 bg-danger/5 p-4">
           <p className="text-sm text-text-secondary">
             Permanently delete your account and all data. This cannot be undone.
           </p>
@@ -141,14 +141,14 @@ export default function Settings() {
               type="text"
               value={deleteConfirm}
               onChange={(e) => setDeleteConfirm(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-danger"
+              className="w-full rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary focus:border-transparent focus:outline-none focus:ring-2 focus:ring-danger"
               placeholder="DELETE"
             />
           </div>
           <button
             onClick={handleDeleteAccount}
             disabled={deleteConfirm !== 'DELETE' || deleting}
-            className="w-full py-2.5 px-4 rounded-lg bg-danger text-white font-medium hover:bg-danger/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-xl bg-danger px-4 py-3 font-bold text-white transition-colors hover:bg-danger/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {deleting ? 'Deleting...' : 'Delete Account'}
           </button>

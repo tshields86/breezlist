@@ -131,12 +131,12 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
               placeholder="Email address"
               required
               autoComplete="off"
-              className="flex-1 px-3 py-2.5 rounded-lg border border-border bg-bg-primary text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-accent"
+              className="flex-1 rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary placeholder:text-text-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent"
             />
             <button
               type="submit"
               disabled={loading || !email.trim()}
-              className="px-4 py-2.5 rounded-lg bg-accent text-white font-medium hover:bg-accent-hover transition-colors disabled:opacity-50 shrink-0"
+              className="grad-sky shadow-sky shrink-0 rounded-xl px-5 font-bold text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
             >
               Invite
             </button>
@@ -147,14 +147,14 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
       )}
 
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-text-muted">Members</h3>
+        <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted">Members</h3>
         {members.length === 0 ? (
           <p className="text-sm text-text-secondary">No one else has access yet</p>
         ) : (
           members.map((member) => (
             <div key={member.user_id} className="flex items-center justify-between py-2">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-bg-tertiary flex items-center justify-center text-sm font-medium text-text-secondary">
+                <div className="grad-sky flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white">
                   {member.profile?.display_name?.[0]?.toUpperCase() ?? '?'}
                 </div>
                 <div>

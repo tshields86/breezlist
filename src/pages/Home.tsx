@@ -36,7 +36,7 @@ export default function Home() {
 
       <button
         onClick={() => setShowCreate(true)}
-        className="fixed right-4 w-14 h-14 rounded-full bg-accent text-white shadow-lg hover:bg-accent-hover transition-colors flex items-center justify-center z-30"
+        className="grad-sky shadow-sky fixed right-4 z-30 flex h-14 w-14 items-center justify-center rounded-2xl text-white transition-transform hover:-translate-y-0.5"
         style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}
         aria-label="Create new list"
       >
