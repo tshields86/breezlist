@@ -6,9 +6,9 @@ export function Header() {
   const { signOut } = useAuth()
 
   return (
-    <header className="sticky top-0 z-40 bg-bg-primary/80 backdrop-blur-sm border-b border-border">
-      <div className="flex items-center justify-between h-14 px-4 max-w-lg mx-auto">
-        <Logo className="text-xl" />
+    <header className="sticky top-0 z-40 glass border-b border-border">
+      <div className="flex items-center justify-between h-16 px-4 max-w-lg mx-auto">
+        <Logo withMark markSize={30} className="text-lg" />
         <div className="flex items-center gap-1">
           <ThemeToggle />
           <button

@@ -42,7 +42,7 @@ const navItems = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-bg-primary border-t border-border safe-area-bottom z-40">
+    <nav className="fixed bottom-0 left-0 right-0 glass border-t border-border safe-area-bottom z-40">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
         {navItems.map((item) => (
           <NavLink
@@ -50,13 +50,24 @@ export function BottomNav() {
             to={item.to}
             className={({ isActive }) =>
               cn(
-                'flex flex-col items-center justify-center gap-1 w-16 h-full transition-colors',
+                'flex flex-col items-center justify-center gap-1 w-20 h-full font-semibold transition-colors',
                 isActive ? 'text-accent' : 'text-text-muted hover:text-text-secondary',
               )
             }
           >
-            {item.icon}
-            <span className="text-xs font-medium">{item.label}</span>
+            {({ isActive }) => (
+              <>
+                <span
+                  className={cn(
+                    'grid place-items-center rounded-xl px-4 py-1 transition-colors',
+                    isActive && 'grad-chip',
+                  )}
+                >
+                  {item.icon}
+                </span>
+                <span className="text-xs">{item.label}</span>
+              </>
+            )}
           </NavLink>
         ))}
       </div>
