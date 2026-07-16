@@ -60,12 +60,17 @@ export const viewport: Viewport = {
 }
 
 function ThemeScript() {
+  // Reads the shared .breezlist.com cookie first (so the preference carries
+  // over from the app), then localStorage, then the system preference — before
+  // first paint, to avoid a flash.
   const script = `
     (function() {
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      }
+      try {
+        var m = document.cookie.match(/(?:^|; )breezlist-theme=(light|dark|system)/);
+        var t = m ? m[1] : localStorage.getItem('breezlist-theme');
+        var dark = t === 'dark' || ((!t || t === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      } catch (e) {}
     })();
   `
   return <script dangerouslySetInnerHTML={{ __html: script }} />

@@ -26,9 +26,15 @@ export function Header() {
 
   function toggleTheme() {
     const next = !dark
+    const value = next ? 'dark' : 'light'
     setDark(next)
     document.documentElement.classList.toggle('dark', next)
-    localStorage.setItem('theme', next ? 'dark' : 'light')
+    localStorage.setItem('breezlist-theme', value)
+    // Shared across *.breezlist.com so the app picks up the same preference.
+    const onBreezlist =
+      location.hostname === 'breezlist.com' || location.hostname.endsWith('.breezlist.com')
+    const domain = onBreezlist ? '; domain=.breezlist.com' : ''
+    document.cookie = `breezlist-theme=${value}; path=/; max-age=31536000; samesite=lax${domain}`
   }
 
   return (
