@@ -56,7 +56,7 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
         <p className="text-text-secondary">
           We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account.
         </p>
-        <button onClick={onSwitchToLogin} className="font-semibold text-accent hover:underline">
+        <button onClick={onSwitchToLogin} className="font-semibold text-accent-text hover:underline">
           Back to login
         </button>
       </div>
@@ -121,7 +121,7 @@ export function SignupForm({ onSwitchToLogin }: SignupFormProps) {
 
       <p className="text-center text-sm text-text-secondary">
         Already have an account?{' '}
-        <button onClick={onSwitchToLogin} className="font-semibold text-accent hover:underline">
+        <button onClick={onSwitchToLogin} className="font-semibold text-accent-text hover:underline">
           Sign in
         </button>
       </p>

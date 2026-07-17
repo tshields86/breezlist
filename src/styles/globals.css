@@ -5,6 +5,7 @@
   --color-brand-list: var(--color-brand-list-val);
   --color-accent: var(--color-accent-val);
   --color-accent-hover: var(--color-accent-hover-val);
+  --color-accent-text: var(--color-accent-text-val);
   --color-bg-primary: var(--color-bg-primary-val);
   --color-bg-secondary: var(--color-bg-secondary-val);
   --color-bg-tertiary: var(--color-bg-tertiary-val);
@@ -26,12 +27,13 @@
   --color-brand-list-val: #1b2440;
   --color-accent-val: #3e97f5;
   --color-accent-hover-val: #2f7ee0;
+  --color-accent-text-val: #2563c9; /* AA-safe accent for small text/links */
   --color-bg-primary-val: #f4f8ff;
   --color-bg-secondary-val: #ffffff;
   --color-bg-tertiary-val: #eaf2ff;
   --color-text-primary-val: #1b2440;
   --color-text-secondary-val: #5a6785;
-  --color-text-muted-val: #8a96b4;
+  --color-text-muted-val: #64708c;
   --color-border-val: #e4ecfb;
   --color-success-val: #22c55e;
   --color-warning-val: #f59e0b;
@@ -40,7 +42,7 @@
 
   --glass: rgba(255, 255, 255, 0.62);
   --glass-brd: rgba(255, 255, 255, 0.75);
-  --grad-sky: linear-gradient(150deg, #5aa6f7, #2f7ee0);
+  --grad-sky: linear-gradient(150deg, #2f76d0, #2a6ccb);
   --grad-dawn: linear-gradient(150deg, #ffe7c4 0%, #cfe4ff 42%, #c9f6e7 100%);
   --grad-chip: linear-gradient(150deg, #eaf3ff, #e3fbf3);
   --shadow-sky: 0 24px 60px -28px rgba(62, 151, 245, 0.55);
@@ -54,12 +56,13 @@
   --color-brand-list-val: #eaf1ff;
   --color-accent-val: #5aa6f7;
   --color-accent-hover-val: #7dbbff;
+  --color-accent-text-val: #7dbbff; /* bright accent already clears AA on dark surfaces */
   --color-bg-primary-val: #0b1220;
   --color-bg-secondary-val: #121c30;
   --color-bg-tertiary-val: #1b2740;
   --color-text-primary-val: #eaf1ff;
   --color-text-secondary-val: #9db0d6;
-  --color-text-muted-val: #6b7ea6;
+  --color-text-muted-val: #7d8fb8;
   --color-border-val: #223154;
   --color-success-val: #4ade80;
   --color-warning-val: #fbbf24;
@@ -68,7 +71,7 @@
 
   --glass: rgba(18, 28, 48, 0.55);
   --glass-brd: rgba(255, 255, 255, 0.10);
-  --grad-sky: linear-gradient(150deg, #4a94ea, #2f6fd0);
+  --grad-sky: linear-gradient(150deg, #2f76d0, #2a6ccb);
   --grad-dawn: linear-gradient(150deg, #22314f 0%, #1a2c52 44%, #123e45 100%);
   --grad-chip: linear-gradient(150deg, #17233d, #133029);
   --shadow-sky: 0 24px 60px -28px rgba(62, 151, 245, 0.45);

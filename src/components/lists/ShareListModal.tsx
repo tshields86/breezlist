@@ -115,7 +115,7 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
         <button
           type="button"
           onClick={onClose}
-          className="px-3 py-2 rounded-lg text-accent font-semibold hover:bg-bg-secondary transition-colors"
+          className="px-3 py-2 rounded-lg text-accent-text font-semibold hover:bg-bg-secondary transition-colors"
         >
           Done
         </button>

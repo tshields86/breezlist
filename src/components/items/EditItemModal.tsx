@@ -74,7 +74,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
           type="submit"
           form="edit-item-form"
           disabled={loading || !text.trim()}
-          className="px-3 py-2 rounded-lg text-accent font-semibold hover:bg-bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-2 rounded-lg text-accent-text font-semibold hover:bg-bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Save
         </button>

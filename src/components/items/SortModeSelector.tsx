@@ -22,7 +22,7 @@ export function SortModeSelector({ value, onChange }: SortModeSelectorProps) {
           className={cn(
             'rounded-lg px-3 py-1 text-xs font-bold transition-colors',
             value === mode.value
-              ? 'bg-bg-secondary text-accent shadow-sm'
+              ? 'bg-bg-secondary text-accent-text shadow-sm'
               : 'text-text-muted hover:text-text-secondary',
           )}
         >
