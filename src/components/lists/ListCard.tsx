@@ -25,15 +25,21 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
   const timeAgo = getRelativeTime(updatedAt)
 
   return (
-    <button
-      onClick={onClick}
+    <article
       className={cn(
-        'shadow-soft w-full rounded-2xl border border-border p-4 text-left',
+        'shadow-soft relative rounded-2xl border border-border p-4',
         'bg-bg-secondary transition-all hover:-translate-y-0.5 hover:border-accent/40',
-        'focus:outline-none focus:ring-2 focus:ring-accent',
       )}
     >
-      <div className="flex items-center gap-3">
+      {/* Full-card navigation target. Sits beneath the content so nested
+          controls (delete) can layer above it without nesting <button>s. */}
+      <button
+        onClick={onClick}
+        aria-label={`Open ${name}`}
+        className="absolute inset-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+      />
+
+      <div className="pointer-events-none relative flex items-center gap-3">
         <span className="grad-chip grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xl">
           {emojiForListType(listType)}
         </span>
@@ -67,8 +73,8 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
           {isOwner && onDelete && (
             <button
               onClick={handleDelete}
-              className="ml-1 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-tertiary hover:text-danger"
-              aria-label="Delete list"
+              className="pointer-events-auto relative ml-1 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-bg-tertiary hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+              aria-label={`Delete ${name}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="3 6 5 6 21 6" />
@@ -78,7 +84,7 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
           )}
         </div>
       </div>
-    </button>
+    </article>
   )
 }
 
