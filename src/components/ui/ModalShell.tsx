@@ -1,5 +1,6 @@
-import { type ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { useModalDismiss } from '@/hooks/useModalDismiss.ts'
+import { useFocusTrap } from '@/hooks/useFocusTrap.ts'
 
 interface ModalShellProps {
   open: boolean
@@ -20,12 +21,14 @@ interface ModalShellProps {
  * math and no competing scroll areas. Handles background scroll-lock + Esc.
  */
 export function ModalShell({ open, onClose, title, left, right, children }: ModalShellProps) {
+  const dialogRef = useRef<HTMLDivElement>(null)
   useModalDismiss(open, onClose)
+  useFocusTrap(open, dialogRef)
 
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex sm:items-center sm:justify-center sm:bg-black/40">
+    <div className="fixed inset-0 z-50 flex sm:items-center sm:justify-center sm:bg-black/60 sm:backdrop-blur-sm">
       <button
         type="button"
         aria-label="Close"
@@ -33,10 +36,12 @@ export function ModalShell({ open, onClose, title, left, right, children }: Moda
         className="hidden sm:block fixed inset-0 cursor-default"
       />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="shadow-soft relative flex h-full w-full flex-col overflow-hidden bg-bg-primary sm:h-auto sm:max-h-[85vh] sm:max-w-md sm:rounded-3xl"
+        tabIndex={-1}
+        className="shadow-soft relative flex h-full w-full flex-col overflow-hidden bg-bg-primary outline-none sm:h-auto sm:max-h-[85vh] sm:max-w-md sm:rounded-3xl"
       >
         <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-2">
           <div className="flex flex-1 justify-start">
