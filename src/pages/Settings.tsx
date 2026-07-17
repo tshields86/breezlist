@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth.ts'
 import { useTheme } from '@/hooks/useTheme.ts'
 import { useToast } from '@/components/ui/Toast.tsx'
 import { cn } from '@/lib/utils.ts'
+import { inputClasses } from '@/lib/formClasses.ts'
 import type { ThemeMode } from '@/types/index.ts'
 
 export default function Settings() {
@@ -79,7 +80,7 @@ export default function Settings() {
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="flex-1 rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent"
+              className={cn('flex-1', inputClasses)}
             />
             <button
               onClick={handleSaveName}
@@ -93,7 +94,7 @@ export default function Settings() {
 
         <div>
           <label className="block text-sm font-medium text-text-secondary mb-1">Email</label>
-          <p className="rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-muted">
+          <p className="rounded-xl bg-bg-tertiary px-3.5 py-3 text-text-secondary">
             {user?.email ?? '—'}
           </p>
         </div>
@@ -141,7 +142,7 @@ export default function Settings() {
               type="text"
               value={deleteConfirm}
               onChange={(e) => setDeleteConfirm(e.target.value)}
-              className="w-full rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary focus:border-transparent focus:outline-none focus:ring-2 focus:ring-danger"
+              className={cn('w-full', inputClasses)}
               placeholder="DELETE"
             />
           </div>
