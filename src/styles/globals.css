@@ -14,7 +14,6 @@
   --color-text-muted: var(--color-text-muted-val);
   --color-border: var(--color-border-val);
   --color-success: var(--color-success-val);
-  --color-warning: var(--color-warning-val);
   --color-danger: var(--color-danger-val);
   --color-star: var(--color-star-val);
 
@@ -36,7 +35,6 @@
   --color-text-muted-val: #64708c;
   --color-border-val: #e4ecfb;
   --color-success-val: #22c55e;
-  --color-warning-val: #f59e0b;
   --color-danger-val: #ef4444;
   --color-star-val: #ff8fa3;
 
@@ -65,7 +63,6 @@
   --color-text-muted-val: #7d8fb8;
   --color-border-val: #223154;
   --color-success-val: #4ade80;
-  --color-warning-val: #fbbf24;
   --color-danger-val: #f87171;
   --color-star-val: #ff9db0;
 
@@ -139,4 +136,22 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 0.5rem;
+}
+
+/* ===================== reduced motion ===================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* The loading spinner is essential progress feedback — keep it turning. */
+  .animate-spin {
+    animation-duration: 0.8s !important;
+    animation-iteration-count: infinite !important;
+  }
 }
