@@ -512,7 +512,7 @@ export default function ListView() {
                         clearCompleted()
                       }
                     }}
-                    className="text-sm font-semibold text-accent hover:underline"
+                    className="text-sm font-semibold text-accent-text hover:underline"
                   >
                     Clear all
                   </button>

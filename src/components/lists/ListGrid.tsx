@@ -33,7 +33,7 @@ export function ListGrid({ ownedLists, sharedLists, onDelete }: ListGridProps) {
         <BrandMark size={56} className="mb-5 opacity-90" />
         <h3 className="mb-2 text-lg font-bold text-text-primary">No lists yet</h3>
         <p className="max-w-xs text-text-secondary">
-          Tap the <span className="font-semibold text-accent">+</span> button to start your first list —
+          Tap the <span className="font-semibold text-accent-text">+</span> button to start your first list —
           it&apos;s a breeze.
         </p>
       </div>
@@ -44,10 +44,7 @@ export function ListGrid({ ownedLists, sharedLists, onDelete }: ListGridProps) {
     <div className="space-y-6">
       {ownedLists.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-3 px-1">
-            My Lists
-          </h2>
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
             {ownedLists.map((list) => (
               <ListCard
                 key={list.id}
@@ -71,7 +68,7 @@ export function ListGrid({ ownedLists, sharedLists, onDelete }: ListGridProps) {
           <h2 className="text-sm font-semibold text-text-muted uppercase tracking-wider mb-3 px-1">
             Shared with Me
           </h2>
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
             {sharedLists.map((list) => (
               <ListCard
                 key={list.id}

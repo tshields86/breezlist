@@ -6,7 +6,7 @@ export function Header() {
   const { signOut } = useAuth()
 
   return (
-    <header className="sticky top-0 z-40 glass border-b border-border">
+    <header className="sticky top-0 z-40 glass border-b border-border lg:hidden">
       <div className="flex items-center justify-between h-16 px-4 max-w-lg mx-auto">
         <Logo withMark markSize={30} className="text-lg" />
         <div className="flex items-center gap-1">
