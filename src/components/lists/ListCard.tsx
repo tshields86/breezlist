@@ -7,6 +7,7 @@ interface ListCardProps {
   name: string
   listType: string
   itemCount: number
+  completedCount: number
   updatedAt: string
   isOwner: boolean
   members: Array<{
@@ -16,13 +17,20 @@ interface ListCardProps {
   onDelete?: () => void
 }
 
-export function ListCard({ name, listType, itemCount, updatedAt, isOwner, members, onClick, onDelete }: ListCardProps) {
+export function ListCard({ name, listType, itemCount, completedCount, updatedAt, isOwner, members, onClick, onDelete }: ListCardProps) {
   const handleDelete = (e: MouseEvent) => {
     e.stopPropagation()
     onDelete?.()
   }
 
   const timeAgo = getRelativeTime(updatedAt)
+  const pct = itemCount > 0 ? Math.round((completedCount / itemCount) * 100) : 0
+  const meta =
+    itemCount === 0
+      ? 'No items yet'
+      : completedCount > 0
+        ? `${completedCount} of ${itemCount} done`
+        : `${itemCount} ${itemCount === 1 ? 'item' : 'items'}`
 
   return (
     <article
@@ -46,10 +54,22 @@ export function ListCard({ name, listType, itemCount, updatedAt, isOwner, member
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-bold text-text-primary">{name}</h3>
           <div className="mt-0.5 flex items-center gap-2 text-sm font-medium text-text-muted">
-            <span>{itemCount} {itemCount === 1 ? 'item' : 'items'}</span>
+            <span>{meta}</span>
             <span aria-hidden>·</span>
             <span>{timeAgo}</span>
           </div>
+          {itemCount > 0 && (
+            <div
+              className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-bg-tertiary"
+              role="progressbar"
+              aria-valuenow={pct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`${pct}% complete`}
+            >
+              <div className="grad-sky h-full rounded-full transition-[width]" style={{ width: `${pct}%` }} />
+            </div>
+          )}
         </div>
         <div className="flex shrink-0 items-center gap-1">
           {members.length > 0 && (

@@ -8,6 +8,7 @@ type ListInsert = Database['public']['Tables']['lists']['Insert']
 
 interface ListWithMeta extends List {
   item_count: number
+  completed_count: number
   members: Array<{
     user_id: string
     role: string
@@ -31,7 +32,7 @@ export function useLists() {
       .select(`
         *,
         list_members(user_id, role, profile:profiles!list_members_user_id_fkey(display_name, avatar_url)),
-        items(count)
+        items(is_completed)
       `)
       .eq('is_template', false)
       .order('updated_at', { ascending: false })
@@ -42,19 +43,23 @@ export function useLists() {
       return
     }
 
-    const mapped: ListWithMeta[] = (data ?? []).map((list) => ({
-      ...list,
-      item_count: (list.items as unknown as Array<{ count: number }>)?.[0]?.count ?? 0,
-      members: ((list.list_members ?? []) as unknown as Array<{
-        user_id: string
-        role: string
-        profile: { display_name: string | null; avatar_url: string | null } | null
-      }>).map((m) => ({
-        user_id: m.user_id,
-        role: m.role,
-        profile: m.profile ?? null,
-      })),
-    }))
+    const mapped: ListWithMeta[] = (data ?? []).map((list) => {
+      const items = (list.items as unknown as Array<{ is_completed: boolean }>) ?? []
+      return {
+        ...list,
+        item_count: items.length,
+        completed_count: items.filter((i) => i.is_completed).length,
+        members: ((list.list_members ?? []) as unknown as Array<{
+          user_id: string
+          role: string
+          profile: { display_name: string | null; avatar_url: string | null } | null
+        }>).map((m) => ({
+          user_id: m.user_id,
+          role: m.role,
+          profile: m.profile ?? null,
+        })),
+      }
+    })
 
     setLists(mapped)
     setLoading(false)

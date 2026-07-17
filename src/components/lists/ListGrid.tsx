@@ -8,6 +8,7 @@ interface ListItem {
   name: string
   list_type: string
   item_count: number
+  completed_count: number
   updated_at: string
   owner_id: string
   members: Array<{
@@ -52,6 +53,7 @@ export function ListGrid({ ownedLists, sharedLists, onDelete }: ListGridProps) {
                 name={list.name}
                 listType={list.list_type}
                 itemCount={list.item_count}
+                completedCount={list.completed_count}
                 updatedAt={list.updated_at}
                 isOwner={list.owner_id === user?.id}
                 members={list.members}
@@ -76,6 +78,7 @@ export function ListGrid({ ownedLists, sharedLists, onDelete }: ListGridProps) {
                 name={list.name}
                 listType={list.list_type}
                 itemCount={list.item_count}
+                completedCount={list.completed_count}
                 updatedAt={list.updated_at}
                 isOwner={false}
                 members={list.members}
