@@ -1,11 +1,26 @@
-import { Outlet, useMatch } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 import { Header } from '@/components/layout/Header.tsx'
 import { BottomNav } from '@/components/layout/BottomNav.tsx'
 import { Sidebar } from '@/components/layout/Sidebar.tsx'
 import { InstallBanner } from '@/components/ui/InstallBanner.tsx'
+import { supabase } from '@/lib/supabase.ts'
 import { cn } from '@/lib/utils.ts'
 
 export function AppShell() {
+  const navigate = useNavigate()
+
+  // A share link opened while logged out stashes its token; once the user is
+  // authenticated and lands here, join the list and drop them into it.
+  useEffect(() => {
+    const token = sessionStorage.getItem('pendingShareToken')
+    if (!token) return
+    sessionStorage.removeItem('pendingShareToken')
+    supabase.rpc('join_via_share_link', { _token: token }).then(({ data, error }) => {
+      if (!error && data) navigate(`/lists/${data}`)
+    })
+  }, [navigate])
+
   // The list detail view provides its own contextual header, so the global
   // mobile header is suppressed there (avoids a stacked double header).
   const isListDetail = useMatch('/lists/:id')

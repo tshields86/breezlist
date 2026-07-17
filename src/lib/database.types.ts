@@ -45,6 +45,8 @@ export interface Database {
           list_type: string
           is_template: boolean
           sort_preference: string
+          share_token: string | null
+          share_enabled: boolean
           created_at: string
           updated_at: string
         }
@@ -56,6 +58,8 @@ export interface Database {
           list_type?: string
           is_template?: boolean
           sort_preference?: string
+          share_token?: string | null
+          share_enabled?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -67,6 +71,8 @@ export interface Database {
           list_type?: string
           is_template?: boolean
           sort_preference?: string
+          share_token?: string | null
+          share_enabled?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -333,6 +339,44 @@ export interface Database {
       user_has_list_access: {
         Args: { _list_id: string }
         Returns: boolean
+      }
+      create_share_link: {
+        Args: { _list_id: string }
+        Returns: string
+      }
+      revoke_share_link: {
+        Args: { _list_id: string }
+        Returns: undefined
+      }
+      get_shared_list: {
+        Args: { _token: string }
+        Returns: {
+          id: string
+          name: string
+          list_type: string
+          description: string | null
+          sort_preference: string
+          updated_at: string
+        }[]
+      }
+      get_shared_items: {
+        Args: { _token: string }
+        Returns: {
+          id: string
+          list_id: string
+          text: string
+          quantity: number | null
+          unit: string | null
+          notes: string | null
+          is_completed: boolean
+          is_starred: boolean
+          sort_order: number
+          category_id: string | null
+        }[]
+      }
+      join_via_share_link: {
+        Args: { _token: string }
+        Returns: string
       }
     }
     Enums: Record<string, never>

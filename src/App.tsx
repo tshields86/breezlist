@@ -8,6 +8,7 @@ import { ToastProvider } from '@/components/ui/Toast.tsx'
 
 const Landing = lazy(() => import('@/pages/Landing.tsx'))
 const AuthCallback = lazy(() => import('@/pages/AuthCallback.tsx'))
+const SharedList = lazy(() => import('@/pages/SharedList.tsx'))
 const Home = lazy(() => import('@/pages/Home.tsx'))
 const ListView = lazy(() => import('@/pages/ListView.tsx'))
 const Templates = lazy(() => import('@/pages/Templates.tsx'))
@@ -32,6 +33,7 @@ export default function App() {
               <Route path="/login" element={<Landing />} />
               <Route path="/signup" element={<Landing />} />
               <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/s/:token" element={<SharedList />} />
               <Route
                 element={
                   <ProtectedRoute>

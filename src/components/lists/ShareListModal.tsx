@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabase.ts'
 import { useAuth } from '@/hooks/useAuth.ts'
 import { ModalShell } from '@/components/ui/ModalShell.tsx'
@@ -28,6 +28,59 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState<string | null>(null)
+  const [shareToken, setShareToken] = useState<string | null>(null)
+  const [shareEnabled, setShareEnabled] = useState(false)
+  const [linkBusy, setLinkBusy] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const shareUrl = shareToken ? `${window.location.origin}/s/${shareToken}` : ''
+
+  // Load the current share-link state when the modal opens (owner only).
+  useEffect(() => {
+    if (!open || !isOwner) return
+    supabase
+      .from('lists')
+      .select('share_token, share_enabled')
+      .eq('id', listId)
+      .single()
+      .then(({ data }) => {
+        setShareToken(data?.share_token ?? null)
+        setShareEnabled(data?.share_enabled ?? false)
+      })
+  }, [open, isOwner, listId])
+
+  const handleCreateLink = async () => {
+    setLinkBusy(true)
+    const { data, error: linkError } = await supabase.rpc('create_share_link', { _list_id: listId })
+    setLinkBusy(false)
+    if (linkError || !data) {
+      toast('Could not create link. Please try again.', 'error')
+      return
+    }
+    setShareToken(data)
+    setShareEnabled(true)
+  }
+
+  const handleRevokeLink = async () => {
+    setLinkBusy(true)
+    const { error: linkError } = await supabase.rpc('revoke_share_link', { _list_id: listId })
+    setLinkBusy(false)
+    if (linkError) {
+      toast('Could not disable link. Please try again.', 'error')
+      return
+    }
+    setShareEnabled(false)
+  }
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      toast('Could not copy. Long-press the link to copy it.', 'error')
+    }
+  }
 
   const handleInvite = async (e: FormEvent) => {
     e.preventDefault()
@@ -122,7 +175,48 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
       }
     >
       {isOwner && (
+        <div className="mb-6">
+          <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-text-muted">Share by link</h3>
+          {shareEnabled && shareToken ? (
+            <>
+              <div className="flex gap-2">
+                <input readOnly value={shareUrl} onFocus={(e) => e.target.select()} className={cn('flex-1', inputClasses)} />
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="grad-sky shadow-sky shrink-0 rounded-xl px-5 font-bold text-white transition-transform hover:-translate-y-0.5"
+                >
+                  {copied ? 'Copied' : 'Copy'}
+                </button>
+              </div>
+              <div className="mt-2 flex items-center justify-between">
+                <p className="text-sm text-text-secondary">Anyone with the link can view. Sign in to edit.</p>
+                <button
+                  type="button"
+                  onClick={handleRevokeLink}
+                  disabled={linkBusy}
+                  className="text-sm font-semibold text-danger hover:underline disabled:opacity-50"
+                >
+                  Disable link
+                </button>
+              </div>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={handleCreateLink}
+              disabled={linkBusy}
+              className="grad-sky shadow-sky w-full rounded-xl px-4 py-2.5 font-bold text-white transition-transform hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {linkBusy ? 'Creating…' : 'Create share link'}
+            </button>
+          )}
+        </div>
+      )}
+
+      {isOwner && (
         <form onSubmit={handleInvite} className="mb-6">
+          <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-text-muted">Invite by email</h3>
           <div className="flex gap-2">
             <input
               type="email"
