@@ -35,31 +35,35 @@ export function ItemRow({
     <div
       id={`item-${id}`}
       className={cn(
-        'flex items-start gap-3 px-4 py-3 border-b border-border last:border-b-0',
+        'flex items-center gap-1 px-2 py-1 border-b border-border last:border-b-0',
         'transition-colors',
         isCompleted && 'opacity-60',
       )}
     >
       <button
         onClick={onToggleComplete}
-        className={cn(
-          'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors',
-          isCompleted
-            ? 'grad-sky border-transparent'
-            : 'border-text-muted/40 hover:border-accent',
-        )}
+        className="group flex h-11 w-11 shrink-0 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-accent"
         aria-label={isCompleted ? 'Mark incomplete' : 'Mark complete'}
       >
-        {isCompleted && (
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        )}
+        <span
+          className={cn(
+            'flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors',
+            isCompleted
+              ? 'grad-sky border-transparent'
+              : 'border-text-muted/40 group-hover:border-accent',
+          )}
+        >
+          {isCompleted && (
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          )}
+        </span>
       </button>
 
       <button
         onClick={onEdit}
-        className="flex-1 min-w-0 text-left"
+        className="min-h-11 flex-1 min-w-0 rounded-lg px-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <div className="flex items-center gap-2">
           <span className={cn(
@@ -87,12 +91,12 @@ export function ItemRow({
         )}
       </button>
 
-      <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-center shrink-0">
         {!isCompleted && (
           <button
             onClick={onToggleStar}
             className={cn(
-              'p-1.5 rounded-lg transition-colors',
+              'flex h-11 w-11 items-center justify-center rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent',
               isStarred ? 'text-star' : 'text-text-muted hover:text-star',
             )}
             aria-label={isStarred ? 'Unstar' : 'Star'}
@@ -104,7 +108,7 @@ export function ItemRow({
         )}
         <button
           onClick={onDelete}
-          className="p-1.5 rounded-lg text-text-muted hover:text-danger transition-colors"
+          className="flex h-11 w-11 items-center justify-center rounded-lg text-text-muted outline-none transition-colors hover:text-danger focus-visible:ring-2 focus-visible:ring-accent"
           aria-label="Delete item"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

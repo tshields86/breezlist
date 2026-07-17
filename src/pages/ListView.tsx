@@ -314,7 +314,7 @@ export default function ListView() {
 
         {/* Sort mode selector */}
         {(activeItems.length > 1 || completedItems.length > 0) && (
-          <div className="flex justify-end mt-2">
+          <div className="flex justify-start mt-2">
             <SortModeSelector value={sortPreference} onChange={handleSortChange} />
           </div>
         )}
@@ -512,7 +512,7 @@ export default function ListView() {
                         clearCompleted()
                       }
                     }}
-                    className="text-sm font-semibold text-accent hover:underline"
+                    className="text-sm font-semibold text-accent-text hover:underline"
                   >
                     Clear all
                   </button>

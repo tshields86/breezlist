@@ -12,9 +12,6 @@
   --color-text-secondary: var(--color-text-secondary-val);
   --color-text-muted: var(--color-text-muted-val);
   --color-border: var(--color-border-val);
-  --color-mint: var(--color-mint-val);
-  --color-peach: var(--color-peach-val);
-  --color-violet: var(--color-violet-val);
   --color-star: var(--color-star-val);
 
   --font-sans: var(--font-onest), system-ui, -apple-system, sans-serif;
@@ -31,11 +28,8 @@
   --color-bg-tertiary-val: #eaf2ff;
   --color-text-primary-val: #1b2440;
   --color-text-secondary-val: #5a6785;
-  --color-text-muted-val: #8a96b4;
+  --color-text-muted-val: #64708c;
   --color-border-val: #e4ecfb;
-  --color-mint-val: #43d6ae;
-  --color-peach-val: #ffc98a;
-  --color-violet-val: #b197fc;
   --color-star-val: #ff8fa3;
 
   /* effects */
@@ -60,11 +54,8 @@
   --color-bg-tertiary-val: #1b2740;
   --color-text-primary-val: #eaf1ff;
   --color-text-secondary-val: #9db0d6;
-  --color-text-muted-val: #6b7ea6;
+  --color-text-muted-val: #7d8fb8;
   --color-border-val: #223154;
-  --color-mint-val: #4fe0ba;
-  --color-peach-val: #ffb877;
-  --color-violet-val: #bda5ff;
   --color-star-val: #ff9db0;
 
   --glass: rgba(18, 28, 48, 0.55);

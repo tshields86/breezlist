@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, type FormEvent, type KeyboardEvent } from 'react'
 import { useItemHistory } from '@/hooks/useItemHistory.ts'
 import { ItemAutocomplete } from '@/components/items/ItemAutocomplete.tsx'
+import { cn } from '@/lib/utils.ts'
+import { inputClasses } from '@/lib/formClasses.ts'
 
 interface AddItemInputProps {
   onAdd: (input: {
@@ -79,7 +81,7 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
             placeholder="Add an item…"
             maxLength={500}
             autoComplete="off"
-            className="flex-1 rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary placeholder:text-text-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent"
+            className={cn('flex-1', inputClasses)}
           />
           <button
             type="submit"

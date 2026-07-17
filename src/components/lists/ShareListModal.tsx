@@ -2,6 +2,9 @@ import { useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabase.ts'
 import { useAuth } from '@/hooks/useAuth.ts'
 import { ModalShell } from '@/components/ui/ModalShell.tsx'
+import { useToast } from '@/components/ui/Toast.tsx'
+import { cn } from '@/lib/utils.ts'
+import { inputClasses } from '@/lib/formClasses.ts'
 
 interface Member {
   user_id: string
@@ -20,6 +23,7 @@ interface ShareListModalProps {
 
 export function ShareListModal({ open, onClose, listId, isOwner, members, onMembersChange }: ShareListModalProps) {
   const { user } = useAuth()
+  const { toast } = useToast()
   const [email, setEmail] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -41,15 +45,8 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
       return
     }
 
-    // Check if already a member
-    const existingMember = members.find((m) => m.profile?.display_name === trimmedEmail)
-    if (existingMember) {
-      setError('This user is already a member')
-      setLoading(false)
-      return
-    }
-
-    // Check if user exists
+    // Look up the invitee. Duplicate members are caught by the DB unique
+    // constraint below (we don't have member emails on the client to pre-check).
     const { data: profile } = await supabase
       .from('profiles')
       .select('id')
@@ -67,9 +64,10 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
         })
 
       if (memberError) {
-        setError(memberError.message.includes('duplicate') ? 'Already a member' : memberError.message)
+        setError(memberError.message.includes('duplicate') ? 'Already a member' : 'Could not add member. Please try again.')
       } else {
         setSuccess(`${trimmedEmail} added!`)
+        setEmail('')
         onMembersChange()
       }
     } else {
@@ -83,24 +81,26 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
         })
 
       if (inviteError) {
-        setError(inviteError.message.includes('duplicate') ? 'Invite already sent' : inviteError.message)
+        setError(inviteError.message.includes('duplicate') ? 'Invite already sent' : 'Could not send invite. Please try again.')
       } else {
         setSuccess(`Invite sent to ${trimmedEmail}`)
+        setEmail('')
       }
     }
 
-    setEmail('')
     setLoading(false)
   }
 
   const handleRemoveMember = async (userId: string) => {
-    const { error } = await supabase
+    const { error: removeError } = await supabase
       .from('list_members')
       .delete()
       .eq('list_id', listId)
       .eq('user_id', userId)
 
-    if (!error) {
+    if (removeError) {
+      toast('Could not remove member. Please try again.', 'error')
+    } else {
       onMembersChange()
     }
   }
@@ -115,7 +115,7 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
         <button
           type="button"
           onClick={onClose}
-          className="px-3 py-2 rounded-lg text-accent font-semibold hover:bg-bg-secondary transition-colors"
+          className="px-3 py-2 rounded-lg text-accent-text font-semibold hover:bg-bg-secondary transition-colors"
         >
           Done
         </button>
@@ -131,7 +131,7 @@ export function ShareListModal({ open, onClose, listId, isOwner, members, onMemb
               placeholder="Email address"
               required
               autoComplete="off"
-              className="flex-1 rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary placeholder:text-text-muted focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent"
+              className={cn('flex-1', inputClasses)}
             />
             <button
               type="submit"

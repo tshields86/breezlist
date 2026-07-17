@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { ModalShell } from '@/components/ui/ModalShell.tsx'
+import { cn } from '@/lib/utils.ts'
+import { inputClasses, labelClasses } from '@/lib/formClasses.ts'
 import type { ItemUnit } from '@/types/index.ts'
 
 interface EditItemModalProps {
@@ -37,8 +39,7 @@ const units: Array<{ value: ItemUnit; label: string }> = [
   { value: 'pack', label: 'pack' },
 ]
 
-const fieldClass = 'w-full rounded-xl border border-border bg-bg-secondary px-3.5 py-3 text-text-primary focus:border-transparent focus:outline-none focus:ring-2 focus:ring-accent'
-const labelClass = 'mb-1.5 block text-sm font-semibold text-text-secondary'
+const fieldClass = cn('w-full', inputClasses)
 
 export function EditItemModal({ open, onClose, item, categories, onSave, onDelete }: EditItemModalProps) {
   const [text, setText] = useState(item.text)
@@ -74,7 +75,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
           type="submit"
           form="edit-item-form"
           disabled={loading || !text.trim()}
-          className="px-3 py-2 rounded-lg text-accent font-semibold hover:bg-bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-2 rounded-lg text-accent-text font-semibold hover:bg-bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Save
         </button>
@@ -82,7 +83,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
     >
       <form id="edit-item-form" onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="edit-text" className={labelClass}>Item</label>
+          <label htmlFor="edit-text" className={labelClasses}>Item</label>
           <input
             id="edit-text"
             type="text"
@@ -97,7 +98,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
 
         <div className="flex gap-3">
           <div className="flex-1">
-            <label htmlFor="edit-qty" className={labelClass}>Quantity</label>
+            <label htmlFor="edit-qty" className={labelClasses}>Quantity</label>
             <input
               id="edit-qty"
               type="number"
@@ -111,7 +112,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
             />
           </div>
           <div className="flex-1">
-            <label htmlFor="edit-unit" className={labelClass}>Unit</label>
+            <label htmlFor="edit-unit" className={labelClasses}>Unit</label>
             <select
               id="edit-unit"
               value={unit}
@@ -127,7 +128,7 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
         </div>
 
         <div>
-          <label htmlFor="edit-notes" className={labelClass}>Notes</label>
+          <label htmlFor="edit-notes" className={labelClasses}>Notes</label>
           <textarea
             id="edit-notes"
             value={notes}
@@ -135,14 +136,14 @@ export function EditItemModal({ open, onClose, item, categories, onSave, onDelet
             maxLength={1000}
             rows={2}
             autoComplete="off"
-            className={`${fieldClass} placeholder:text-text-muted resize-none`}
+            className={cn(fieldClass, 'resize-none')}
             placeholder="Optional notes..."
           />
         </div>
 
         {categories && categories.length > 0 && (
           <div>
-            <label htmlFor="edit-category" className={labelClass}>Group</label>
+            <label htmlFor="edit-category" className={labelClasses}>Group</label>
             <select
               id="edit-category"
               value={categoryId}

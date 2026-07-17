@@ -81,7 +81,7 @@ export function LoginForm({ onSwitchToSignup }: LoginFormProps) {
 
       <p className="text-center text-sm text-text-secondary">
         Don&apos;t have an account?{' '}
-        <button onClick={onSwitchToSignup} className="font-semibold text-accent hover:underline">
+        <button onClick={onSwitchToSignup} className="font-semibold text-accent-text hover:underline">
           Sign up
         </button>
       </p>

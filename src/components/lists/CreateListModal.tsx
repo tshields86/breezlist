@@ -45,7 +45,7 @@ export function CreateListModal({ open, onClose, onCreate }: CreateListModalProp
           type="submit"
           form="create-list-form"
           disabled={loading || !name.trim()}
-          className="px-3 py-2 rounded-lg text-accent font-semibold hover:bg-bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-3 py-2 rounded-lg text-accent-text font-semibold hover:bg-bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Creating...' : 'Create'}
         </button>
