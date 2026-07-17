@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
@@ -39,6 +39,7 @@ export default function ListView() {
   const [isRenaming, setIsRenaming] = useState(false)
   const [newName, setNewName] = useState('')
   const [showMenu, setShowMenu] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
   const [showShareModal, setShowShareModal] = useState(false)
   const [members, setMembers] = useState<ListMember[]>([])
   const { saveAsTemplate } = useTemplates()
@@ -65,6 +66,24 @@ export default function ListView() {
   }, [refetchItems])
 
   useRealtime({ listId: id, onItemChange: handleRealtimeChange })
+
+  // Close the list menu on outside click or Escape (a fixed backdrop can't be
+  // used here — the sticky header's backdrop-filter would clip it).
+  useEffect(() => {
+    if (!showMenu) return
+    const onPointerDown = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setShowMenu(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowMenu(false)
+    }
+    document.addEventListener('mousedown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [showMenu])
 
   const sortPreference = (list?.sort_preference ?? 'manual') as SortPreference
 
@@ -205,9 +224,9 @@ export default function ListView() {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-3.5rem-4rem-env(safe-area-inset-bottom,0px))]">
-      {/* List header */}
-      <div className="px-4 py-3 border-b border-border">
-        <div className="flex items-center gap-2">
+      {/* Sticky contextual header: back / title / menu + add input, pinned together */}
+      <div className="glass sticky top-0 z-30 border-b border-border">
+        <div className="flex items-center gap-2 px-4 py-3">
           <button
             onClick={() => navigate('/lists')}
             className="p-1.5 rounded-lg text-text-secondary hover:bg-bg-tertiary transition-colors shrink-0"
@@ -246,7 +265,7 @@ export default function ListView() {
           )}
 
           {/* Menu button */}
-          <div className="relative shrink-0">
+          <div ref={menuRef} className="relative shrink-0">
             <button
               onClick={() => setShowMenu((v) => !v)}
               className="p-1.5 rounded-lg text-text-secondary hover:bg-bg-tertiary transition-colors"
@@ -257,9 +276,7 @@ export default function ListView() {
               </svg>
             </button>
             {showMenu && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                <div className="shadow-soft absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-border bg-bg-secondary py-1.5">
+              <div className="shadow-soft absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-border bg-bg-secondary py-1.5">
                   <button
                     onClick={() => {
                       setIsRenaming(true)
@@ -307,21 +324,20 @@ export default function ListView() {
                     Save as template
                   </button>
                 </div>
-              </>
             )}
           </div>
         </div>
 
-        {/* Sort mode selector */}
-        {(activeItems.length > 1 || completedItems.length > 0) && (
-          <div className="flex justify-start mt-2">
-            <SortModeSelector value={sortPreference} onChange={handleSortChange} />
-          </div>
-        )}
+        {/* Add item input — pinned with the header, above the list */}
+        <AddItemInput onAdd={addItem} />
       </div>
 
-      {/* Add item input — anchored at the top, above the list */}
-      <AddItemInput onAdd={addItem} />
+      {/* Sort mode selector — scrolls away with the list */}
+      {(activeItems.length > 1 || completedItems.length > 0) && (
+        <div className="flex justify-start px-4 py-2">
+          <SortModeSelector value={sortPreference} onChange={handleSortChange} />
+        </div>
+      )}
 
       {/* Items list */}
       <div className="flex-1 overflow-y-auto">

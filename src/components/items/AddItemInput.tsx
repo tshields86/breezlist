@@ -62,40 +62,38 @@ export function AddItemInput({ onAdd }: AddItemInputProps) {
   }
 
   return (
-    <div className="sticky top-16 z-30 glass border-b border-border">
-      <div className="relative px-4 py-3">
-        <ItemAutocomplete
-          suggestions={suggestions}
-          onSelect={handleSuggestionSelect}
-          visible={focused && suggestions.length > 0}
+    <div className="relative border-t border-border px-4 py-3">
+      <ItemAutocomplete
+        suggestions={suggestions}
+        onSelect={handleSuggestionSelect}
+        visible={focused && suggestions.length > 0}
+      />
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          ref={inputRef}
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          placeholder="Add an item…"
+          maxLength={500}
+          autoComplete="off"
+          className={cn('flex-1', inputClasses)}
         />
-        <form onSubmit={handleSubmit} className="flex gap-2">
-          <input
-            ref={inputRef}
-            type="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            placeholder="Add an item…"
-            maxLength={500}
-            autoComplete="off"
-            className={cn('flex-1', inputClasses)}
-          />
-          <button
-            type="submit"
-            disabled={!text.trim() || loading}
-            className="grad-sky shadow-sky flex w-12 shrink-0 items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
-            aria-label="Add item"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          disabled={!text.trim() || loading}
+          className="grad-sky shadow-sky flex w-12 shrink-0 items-center justify-center rounded-xl text-white transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+          aria-label="Add item"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </button>
+      </form>
     </div>
   )
 }
