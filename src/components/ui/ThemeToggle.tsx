@@ -14,7 +14,8 @@ export function ThemeToggle() {
     <button
       onClick={cycleTheme}
       className="inline-flex items-center justify-center w-10 h-10 rounded-lg text-text-secondary hover:bg-bg-tertiary transition-colors"
-      aria-label={`Theme: ${theme}. Currently ${resolvedTheme}. Click to cycle.`}
+      aria-label={`Switch theme (currently ${theme})`}
+      title={`Theme: ${theme}`}
     >
       {resolvedTheme === 'dark' ? (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -19,7 +19,7 @@ export function ItemAutocomplete({ suggestions, onSelect, visible }: ItemAutocom
   const shown = suggestions.slice(0, 3)
 
   return (
-    <div className="shadow-soft absolute left-0 right-0 top-full z-30 mt-1 max-h-52 overflow-y-auto overflow-hidden rounded-xl border border-border bg-bg-secondary">
+    <div className="shadow-soft absolute left-0 right-0 top-full z-30 mt-1 max-h-52 overflow-x-hidden overflow-y-auto rounded-xl border border-border bg-bg-secondary">
       {shown.map((item, i) => (
         <button
           key={`${item.text_display}-${i}`}
